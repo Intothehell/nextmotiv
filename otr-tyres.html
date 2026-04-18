@@ -1876,29 +1876,25 @@
 </script>
 
 
+<!-- Add a clearfix div right before the footer -->
+<div style="clear: both; width: 100%; height: 1px;"></div>
 
 <!-- Footer Section - Dark Blue Theme with larger fonts -->
 <footer class="bg-[#0a1a2f] text-white pt-20 pb-8 relative overflow-hidden">
-  <!-- Background decorative elements -->
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-0 left-0 w-96 h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
     <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#01469b]/20 rounded-full blur-3xl"></div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <!-- Main Footer Content -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-14">
-      <!-- Logo and Company Info - spans 4 columns on large screens -->
       <div class="lg:col-span-4 space-y-5">
         <div class="flex items-center gap-4">
-          <!-- Logo - using logo.png -->
           <img src="/logo.png" alt="NextMotive Engineering Logo" class="h-16 w-auto object-contain">
-          
         </div>
         <p class="text-gray-300 text-base leading-relaxed max-w-md">
           Engineering the future with precision, innovation, and reliability. We deliver next-level solutions for modern industries.
         </p>
-        <!-- Social Links with larger icons -->
         <div class="flex gap-5 pt-4">
           <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
             <i class="fab fa-linkedin-in text-white text-xl group-hover:text-[#0a1a2f]"></i>
@@ -1915,7 +1911,6 @@
         </div>
       </div>
 
-      <!-- Quick Links - Navigation - spans 2 columns -->
       <div class="lg:col-span-2">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Quick Links</h3>
         <ul class="space-y-4">
@@ -1926,7 +1921,6 @@
         </ul>
       </div>
 
-      <!-- More Links - spans 2 columns -->
       <div class="lg:col-span-2">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">More</h3>
         <ul class="space-y-4">
@@ -1937,11 +1931,9 @@
         </ul>
       </div>
 
-      <!-- Contact Info - spans 4 columns -->
       <div class="lg:col-span-4">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Get In Touch</h3>
         <div class="space-y-5">
-          <!-- Address with larger text -->
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-map-marker-alt text-[#f5c542] text-lg"></i>
@@ -1950,14 +1942,12 @@
               No.11 Kossinna Road, Prakandeniya, Imbulgoda
             </p>
           </div>
-          <!-- Phone -->
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="fas fa-phone-alt text-[#f5c542] text-lg"></i>
             </div>
             <p class="text-gray-300 text-base">077 1743606</p>
           </div>
-          <!-- Email -->
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="fas fa-envelope text-[#f5c542] text-lg"></i>
@@ -1968,7 +1958,6 @@
       </div>
     </div>
 
-    <!-- Bottom Bar with Copyright and Credits - larger text -->
     <div class="pt-10 mt-10 border-t border-white/10">
       <div class="flex flex-col md:flex-row justify-between items-center gap-5">
         <div class="text-gray-300 text-base text-center md:text-left">
@@ -1981,41 +1970,64 @@
     </div>
   </div>
 </footer>
-  <!-- AOS Library -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- Custom JavaScript -->
-  <script src="script.js"></script>
 
-  <!-- Back to Top Button -->
+<!-- AOS Library -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<!-- Back to Top Button -->
 <button id="backToTop" class="fixed bottom-8 right-8 z-50 bg-[#f5c542] text-[#01469b] w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-300 opacity-0 invisible transform hover:scale-110 focus:outline-none" aria-label="Back to top">
   <i class="fas fa-arrow-up text-xl"></i>
 </button>
 
-<!-- Add this JavaScript before closing body tag or in your existing script.js -->
 <script>
   // Back to Top Button Functionality
   document.addEventListener('DOMContentLoaded', function() {
     const backToTopButton = document.getElementById('backToTop');
-    
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 500) {
-        backToTopButton.classList.remove('opacity-0', 'invisible');
-        backToTopButton.classList.add('opacity-100', 'visible');
-      } else {
-        backToTopButton.classList.add('opacity-0', 'invisible');
-        backToTopButton.classList.remove('opacity-100', 'visible');
-      }
-    });
-    
-    // Smooth scroll to top when clicked
-    backToTopButton.addEventListener('click', function() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+    if (backToTopButton) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 500) {
+          backToTopButton.classList.remove('opacity-0', 'invisible');
+          backToTopButton.classList.add('opacity-100', 'visible');
+        } else {
+          backToTopButton.classList.add('opacity-0', 'invisible');
+          backToTopButton.classList.remove('opacity-100', 'visible');
+        }
       });
+      
+      backToTopButton.addEventListener('click', function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+    
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
     });
   });
 </script>
+
+<style>
+  /* Force footer to bottom on mobile */
+  @media (max-width: 768px) {
+    footer {
+      position: relative !important;
+      clear: both !important;
+      display: block !important;
+      margin-top: 0 !important;
+      width: 100% !important;
+    }
+    
+    .tyre-card {
+      display: block !important;
+      margin-bottom: 24px !important;
+    }
+  }
+</style>
+
 </body>
 </html>

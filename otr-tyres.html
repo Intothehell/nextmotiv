@@ -57,6 +57,32 @@
   </div>
 </div>
 
+<script>
+  // Preloader animation - FIXED
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    const left = document.getElementById('preloaderLeft');
+    const right = document.getElementById('preloaderRight');
+    const leftContent = document.getElementById('leftContent');
+    const rightContent = document.getElementById('rightContent');
+    const main = document.getElementById('main-content');
+    const topBar = document.getElementById('topInfoBar');
+
+    gsap.set([leftContent, rightContent], { opacity: 0, scale: 0.9 });
+    gsap.set(main, { opacity: 0 });
+    gsap.set(topBar, { opacity: 0 });
+
+    const tl = gsap.timeline();
+    tl.to([leftContent, rightContent], { opacity: 1, scale: 1, duration: 1.5, stagger: 0.2 })
+      .to([leftContent, rightContent], { opacity: 0, scale: 0.8, duration: 1.0, delay: 2.0 })
+      .to(left, { x: '-100%', duration: 1.5, ease: 'power4.inOut' }, 0)
+      .to(right, { x: '100%', duration: 1.5, ease: 'power4.inOut' }, 0)
+      .to(preloader, { opacity: 0, duration: 0.6, onComplete: function() { preloader.style.display = 'none'; } }, 1.5)
+      .to(main, { opacity: 1, duration: 1.0 }, 1.2)
+      .to(topBar, { opacity: 1, duration: 0.8 }, 1.4);
+  });
+</script>
+
 <!-- MAIN WEBSITE -->
 <div id="main-content">
 
@@ -1970,6 +1996,8 @@
   </div>
 </footer>
 
+</div>
+
 <!-- AOS Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
@@ -2011,23 +2039,37 @@
 </script>
 
 <style>
-  /* Force footer to bottom on mobile */
+  /* Mobile fixes - NO CONFLICT WITH GRID */
   @media (max-width: 768px) {
     footer {
       position: relative !important;
       clear: both !important;
-      display: block !important;
-      margin-top: 0 !important;
-      width: 100% !important;
+      margin-top: 40px !important;
     }
     
+    /* DO NOT override tyre-card display - let grid handle it */
     .tyre-card {
-      display: block !important;
-      margin-bottom: 24px !important;
+      margin-bottom: 20px;
     }
   }
+
+  /* FORCE CARDS TO SHOW ON MOBILE - THE RED BOX TRICK */
+@media (max-width: 768px) {
+  .tyre-card {
+    display: block !important;
+    border: 2px solid red !important;
+    margin-bottom: 20px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .tyre-grid {
+    display: block !important;
+  }
+}
 </style>
 
-</div>
+
+
 </body>
 </html>

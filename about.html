@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About</title>
+  <title>NextMotive | Home</title>
   <link rel="icon" href="small logo.png">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,6 +20,7 @@
 </head>
 <body>
 <!-- TOP YELLOW INFO BAR - Always visible on mobile -->
+
 <div id="topInfoBar" class="top-info-bar">
   <div class="info-bar-container">
     <div class="info-item left">
@@ -58,7 +59,7 @@
 <!-- MAIN WEBSITE -->
 <div id="main-content">
 
-  <!-- WHITE NAVIGATION BAR with Mobile Hamburger and Services Dropdown -->
+<!-- WHITE NAVIGATION BAR with Mobile Hamburger and Services Dropdown -->
 <nav class="navbar fixed w-full z-50 py-3 px-4 md:px-10 flex justify-between items-center" id="navbar">
   <div class="logo-container">
     <img src="/logo.png" alt="NextMotive Logo" class="logo-img">
@@ -78,7 +79,7 @@
       </button>
       
       <!-- Dropdown Menu -->
-      <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+      <div class="absolute top-full left-0 mt-0 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
         <div class="py-2">
           <a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
@@ -89,19 +90,13 @@
           <a href="/compressor.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Compressed Air & Pneumatic Tools</span>
+              <span class="font-medium">Compressors</span>
             </div>
           </a>
           <a href="/agri.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
               <span class="font-medium">Agriculture Tractors</span>
-            </div>
-          </a>
-          <a href="/powerengineering.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Stand by Power / Power Engineering</span>
             </div>
           </a>
           <a href="/spareparts.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
@@ -125,7 +120,7 @@
           <a href="/generators.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Diesel Generators</span>
+              <span class="font-medium">Generators</span>
             </div>
           </a>
         </div>
@@ -145,6 +140,10 @@
     <i class="fas fa-bars text-xl"></i>
   </button>
 </nav>
+
+<div id="scrollProgressContainer" class="scroll-progress-container">
+  <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+</div>
 
 <!-- Mobile Menu Overlay (hidden by default) -->
 <div id="mobileMenu" class="fixed inset-0 bg-[#01469b] z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden overflow-y-auto">
@@ -175,15 +174,11 @@
           </a>
           <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-            <span>Compressed Air & Pneumatic Tools</span>
+            <span>Compressors</span>
           </a>
           <a href="/agri.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
             <span>Agriculture Tractors</span>
-          </a>
-          <a href="/powerengineering.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-            <span>Stand by Power / Power Engineering</span>
           </a>
           <a href="/spareparts.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-cogs w-5 text-[#f5c542]"></i>
@@ -199,7 +194,7 @@
           </a>
           <a href="generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-            <span>Diesel Generators</span>
+            <span>Generators</span>
           </a>
         </div>
       </div>
@@ -451,227 +446,6 @@
     transform: rotate(180deg);
   }
 </style>
-
-  <!-- JavaScript for mobile menu and accordion functionality -->
-  <script>
-    // Mobile Menu Toggle and Accordion
-    document.addEventListener('DOMContentLoaded', function() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const closeMenuBtn = document.getElementById('closeMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const mobileServicesBtn = document.getElementById('mobileServicesBtn');
-      const servicesSubmenu = document.getElementById('servicesSubmenu');
-      const servicesArrow = document.getElementById('servicesArrow');
-      
-      // Get all mobile nav links except the services button
-      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
-
-      function openMenu() {
-        mobileMenu.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        mobileMenu.classList.add('translate-x-full');
-        document.body.style.overflow = '';
-        // Reset accordion when closing menu
-        if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) {
-          servicesSubmenu.classList.add('hidden');
-          if (servicesArrow) servicesArrow.classList.remove('rotate-180');
-        }
-      }
-
-      // Mobile Services Accordion
-      if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
-        mobileServicesBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          servicesSubmenu.classList.toggle('hidden');
-          servicesArrow.classList.toggle('rotate-180');
-        });
-      }
-
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', openMenu);
-      }
-
-      if (closeMenuBtn) {
-        closeMenuBtn.addEventListener('click', closeMenu);
-      }
-
-      // Close menu when clicking on links (except services button)
-      mobileNavLinks.forEach(link => {
-        link.addEventListener('click', closeMenu);
-      });
-
-      // Handle escape key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
-          closeMenu();
-        }
-      });
-    });
-  </script>
-
-  <!-- CSS for navigation and dropdowns -->
-  <style>
-    /* Top Info Bar - always visible */
-    .top-info-bar {
-      background: #f5c542;
-      color: #01469b;
-      padding: 0.4rem 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1001;
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.8rem;
-      border-bottom: 1px solid rgba(1, 70, 155, 0.2);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease-in-out, opacity 0.5s ease;
-      opacity: 0;
-    }
-
-    .top-info-bar.visible {
-      opacity: 1;
-    }
-
-    .top-info-bar.hidden {
-      transform: translateY(-100%);
-    }
-
-    @media (max-width: 768px) {
-      .top-info-bar {
-        display: block;
-      }
-    }
-
-    .info-bar-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 4%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      letter-spacing: 0.2px;
-      font-size: 0.75rem;
-    }
-
-    .info-item i {
-      font-size: 0.8rem;
-      color: #01469b;
-      opacity: 0.9;
-    }
-
-    /* Navbar styling */
-    .navbar {
-      top: 32px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    }
-
-    @media (max-width: 768px) {
-      .navbar {
-        top: 32px;
-      }
-    }
-
-    /* Nav link styling */
-    .nav-link {
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: #f5c542;
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after,
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    .nav-link.active {
-      color: #f5c542;
-    }
-
-    /* Contact button styling */
-    .btn-contact {
-      background: #f5c542;
-      color: #01469b;
-      border-radius: 50px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-
-    .btn-contact:hover {
-      background: transparent;
-      color: #f5c542;
-      border-color: #f5c542;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(245, 197, 66, 0.3);
-    }
-
-    /* Logo styling */
-    .logo-img {
-      height: 45px;
-      width: auto;
-    }
-
-    /* Mobile menu overlay */
-    #mobileMenu {
-      z-index: 100;
-      background: linear-gradient(135deg, #01469b 0%, #002b5e 100%);
-    }
-    
-    /* Prevent body scroll when menu is open */
-    body.menu-open {
-      overflow: hidden;
-    }
-
-    /* Dropdown animation */
-    .group:hover .group-hover\:opacity-100 {
-      transition-delay: 0ms;
-    }
-    
-    .group .absolute {
-      pointer-events: none;
-    }
-    
-    .group:hover .absolute {
-      pointer-events: auto;
-    }
-    
-    /* Mobile accordion transitions */
-    #servicesSubmenu {
-      transition: all 0.3s ease;
-    }
-    
-    #servicesSubmenu.hidden {
-      display: none;
-    }
-    
-    .rotate-180 {
-      transform: rotate(180deg);
-    }
-  </style>
-
 
 
 <!-- HERO IMAGE BAR -->

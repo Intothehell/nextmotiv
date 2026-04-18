@@ -1,6 +1,4 @@
-<!-- TOP YELLOW INFO BAR - Always visible on mobile -->
- <!-- kavindu nana -->
-<!--hutto meka wada-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +80,7 @@
       </button>
       
       <!-- Dropdown Menu -->
-      <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+      <div class="absolute top-full left-0 mt-0 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
         <div class="py-2">
           <a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
@@ -93,19 +91,13 @@
           <a href="/compressor.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Compressed Air & Pneumatic Tools</span>
+              <span class="font-medium">Compressors</span>
             </div>
           </a>
           <a href="/agri.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
               <span class="font-medium">Agriculture Tractors</span>
-            </div>
-          </a>
-          <a href="/powerengineering.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Stand by Power / Power Engineering</span>
             </div>
           </a>
           <a href="/spareparts.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
@@ -129,7 +121,7 @@
           <a href="/generators.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Diesel Generators</span>
+              <span class="font-medium">Generators</span>
             </div>
           </a>
         </div>
@@ -149,6 +141,10 @@
     <i class="fas fa-bars text-xl"></i>
   </button>
 </nav>
+
+<div id="scrollProgressContainer" class="scroll-progress-container">
+  <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+</div>
 
 <!-- Mobile Menu Overlay (hidden by default) -->
 <div id="mobileMenu" class="fixed inset-0 bg-[#01469b] z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden overflow-y-auto">
@@ -179,15 +175,11 @@
           </a>
           <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-            <span>Compressed Air & Pneumatic Tools</span>
+            <span>Compressors</span>
           </a>
           <a href="/agri.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
             <span>Agriculture Tractors</span>
-          </a>
-          <a href="/powerengineering.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-            <span>Stand by Power / Power Engineering</span>
           </a>
           <a href="/spareparts.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-cogs w-5 text-[#f5c542]"></i>
@@ -203,7 +195,7 @@
           </a>
           <a href="generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-            <span>Diesel Generators</span>
+            <span>Generators</span>
           </a>
         </div>
       </div>
@@ -1013,6 +1005,18 @@
         behavior: 'smooth'
       });
     });
+  });
+</script>
+
+<script>
+  window.addEventListener("scroll", function () {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+
+    const scrollPercent = (scrollTop / docHeight) * 100;
+
+    document.getElementById("scrollProgressBar").style.width =
+      scrollPercent + "%";
   });
 </script>
 </body>

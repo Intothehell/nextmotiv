@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commercial Vehicles | NextMotive</title>
+  <title>OTR Tyres | NextMotive</title>
   <link rel="icon" href="small logo.png">
 
   <!-- Tailwind CSS -->
@@ -20,83 +20,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   
   <style>
-    /* ===== PAGE-SPECIFIC FIXES ===== */
-    /* These override any conflicting styles without affecting other pages */
+    /* ===== PAGE-SPECIFIC STYLES - NO CONFLICT WITH STYLES.CSS ===== */
     
-    /* Ensure grid displays properly */
-    #vehicles-grid .grid {
-      display: grid !important;
-      grid-template-columns: repeat(1, 1fr) !important;
-      gap: 1rem !important;
-      float: none !important;
-      clear: both !important;
-    }
-    
-    @media (min-width: 480px) {
-      #vehicles-grid .grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      #vehicles-grid .grid {
-        grid-template-columns: repeat(3, 1fr) !important;
-      }
-    }
-    
-    @media (min-width: 1280px) {
-      #vehicles-grid .grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-      }
-    }
-    
-    /* Vehicle card styling */
-    .vehicle-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      float: none !important;
-      width: 100% !important;
-    }
-    
-    .vehicle-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Image container heights */
-    .vehicle-card .image-container {
-      flex-shrink: 0;
-      height: 160px;
-    }
-    
-    @media (min-width: 480px) {
-      .vehicle-card .image-container {
-        height: 176px;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      .vehicle-card .image-container {
-        height: 192px;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .vehicle-card .image-container {
-        height: 208px;
-      }
-    }
-    
-    .vehicle-card img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* Carousel styles */
+    /* Carousel Styles */
     .carousel-slide {
       position: absolute;
       top: 0;
@@ -131,21 +57,9 @@
       transition: opacity 0.7s ease-in-out;
     }
     
-    /* Footer positioning */
-    footer {
-      clear: both !important;
-      position: relative !important;
-      z-index: 1 !important;
-    }
-    
-    section {
-      position: relative;
-      clear: both;
-    }
-    
     /* Hero responsive */
     @media (max-width: 768px) {
-      section.hero-section {
+      .hero-section {
         height: 500px !important;
       }
       .text-item h1 {
@@ -160,7 +74,7 @@
     }
     
     @media (max-width: 640px) {
-      section.hero-section {
+      .hero-section {
         height: 480px !important;
       }
       .text-item h1 {
@@ -169,6 +83,108 @@
       .text-item span {
         font-size: 0.75rem !important;
         padding: 0.25rem 0.75rem !important;
+      }
+    }
+
+    /* ===== TYRE GRID - CLEAN & RELIABLE ===== */
+    .tyre-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    @media (max-width: 1024px) {
+      .tyre-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .tyre-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+    
+    /* Card Styles */
+    .tyre-card {
+      opacity: 1;
+      display: block;
+    }
+    
+    .tyre-card.hidden-card {
+      display: none !important;
+    }
+    
+    /* Card Hover Effects */
+    .tyre-card .group:hover .group-hover\:scale-110 {
+      transform: scale(1.1);
+    }
+    
+    .tyre-card .group:hover .group-hover\:translate-y-0 {
+      transform: translateY(0);
+    }
+    
+    /* Filter Button Styles */
+    .filter-btn {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .filter-btn.active {
+      background: #01469b !important;
+      color: white !important;
+      box-shadow: 0 10px 25px -5px rgba(1, 70, 155, 0.4);
+    }
+    
+    /* Animation for cards */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .tyre-card {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+    
+    .tyre-card:nth-child(1) { animation-delay: 0.05s; }
+    .tyre-card:nth-child(2) { animation-delay: 0.10s; }
+    .tyre-card:nth-child(3) { animation-delay: 0.15s; }
+    .tyre-card:nth-child(4) { animation-delay: 0.20s; }
+    .tyre-card:nth-child(5) { animation-delay: 0.25s; }
+    .tyre-card:nth-child(6) { animation-delay: 0.30s; }
+    .tyre-card:nth-child(7) { animation-delay: 0.35s; }
+    .tyre-card:nth-child(8) { animation-delay: 0.40s; }
+    .tyre-card:nth-child(9) { animation-delay: 0.45s; }
+    .tyre-card:nth-child(10) { animation-delay: 0.50s; }
+    .tyre-card:nth-child(11) { animation-delay: 0.55s; }
+    .tyre-card:nth-child(12) { animation-delay: 0.60s; }
+    .tyre-card:nth-child(13) { animation-delay: 0.65s; }
+    
+    /* Footer clear fix */
+    footer {
+      clear: both !important;
+      position: relative !important;
+      z-index: 1 !important;
+    }
+    
+    section {
+      position: relative;
+      clear: both;
+    }
+    
+    /* Fix for mobile display */
+    @media (max-width: 640px) {
+      .tyre-card {
+        margin-bottom: 20px;
+        width: 100%;
       }
     }
   </style>
@@ -210,6 +226,32 @@
     </div>
   </div>
 </div>
+
+<!-- Preloader Script -->
+<script>
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    const left = document.getElementById('preloaderLeft');
+    const right = document.getElementById('preloaderRight');
+    const leftContent = document.getElementById('leftContent');
+    const rightContent = document.getElementById('rightContent');
+    const main = document.getElementById('main-content');
+    const topBar = document.getElementById('topInfoBar');
+
+    gsap.set([leftContent, rightContent], { opacity: 0, scale: 0.9 });
+    gsap.set(main, { opacity: 0 });
+    gsap.set(topBar, { opacity: 0 });
+
+    const tl = gsap.timeline();
+    tl.to([leftContent, rightContent], { opacity: 1, scale: 1, duration: 1.5, stagger: 0.2 })
+      .to([leftContent, rightContent], { opacity: 0, scale: 0.8, duration: 1.0, delay: 2.0 })
+      .to(left, { x: '-100%', duration: 1.5, ease: 'power4.inOut' }, 0)
+      .to(right, { x: '100%', duration: 1.5, ease: 'power4.inOut' }, 0)
+      .to(preloader, { opacity: 0, duration: 0.6, onComplete: function() { preloader.style.display = 'none'; } }, 1.5)
+      .to(main, { opacity: 1, duration: 1.0 }, 1.2)
+      .to(topBar, { opacity: 1, duration: 0.8 }, 1.4);
+  });
+</script>
 
 <!-- MAIN WEBSITE -->
 <div id="main-content">
@@ -273,13 +315,13 @@
           </a>
           <a href="/otr-tyres.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+              <i class="fas fa-circle w-5 text-[#f5c542]"></i>
               <span class="font-medium">OTR Tyres</span>
             </div>
           </a>
           <a href="/generators.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+              <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
               <span class="font-medium">Diesel Generators</span>
             </div>
           </a>
@@ -344,11 +386,11 @@
             <span>Commercial Vehicles</span>
           </a>
           <a href="otr-tyres.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+            <i class="fas fa-circle w-5 text-[#f5c542]"></i>
             <span>OTR Tyres</span>
           </a>
           <a href="generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+            <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
             <span>Diesel Generators</span>
           </a>
         </div>
@@ -386,23 +428,23 @@
     
     <!-- Carousel Slides -->
     <div class="carousel-slide active" data-slide="0">
-      <img src="images/vehicles/slide1.png" alt="Commercial Truck" class="w-full h-full object-cover">
+      <img src="images/tyres/slide/mining dump truck tire closeup heavy duty.png" alt="OTR Tyre 1" class="w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
     </div>
     <div class="carousel-slide" data-slide="1">
-      <img src="images/vehicles/slide2.png" alt="Logistics Truck" class="w-full h-full object-cover">
+      <img src="images/tyres/slide/tractor tire muddy field close up.png" alt="OTR Tyre 2" class="w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
     </div>
     <div class="carousel-slide" data-slide="2">
-      <img src="images/vehicles/slide3.png" alt="Special Purpose Vehicle" class="w-full h-full object-cover">
+      <img src="images/tyres/slide/construction wheel loader tire.png" alt="OTR Tyre 3" class="w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
     </div>
     <div class="carousel-slide" data-slide="3">
-      <img src="images/vehicles/slide4.png" alt="Heavy Duty Truck" class="w-full h-full object-cover">
+      <img src="images/tyres/slide/earthmoving equipment tire quarry.png" alt="OTR Tyre 4" class="w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
     </div>
     <div class="carousel-slide" data-slide="4">
-      <img src="images/vehicles/slide5.png" alt="Fleet Vehicle" class="w-full h-full object-cover">
+      <img src="images/tyres/slide/off road tire on jeep sand desert.png" alt="OTR Tyre 5" class="w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
     </div>
 
@@ -424,76 +466,73 @@
       <div class="relative min-h-[240px] md:min-h-[280px]">
         
         <div class="text-item absolute top-0 left-0 w-full" data-text="0">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">COMMERCIAL FLEET</span>
+          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">OTR TYRES</span>
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">
-            Heavy-Duty<br>
-            <span class="text-[#f5c542]">Commercial Vehicles</span>
+            Heavy-Duty Off-Road<br>
+            <span class="text-[#f5c542]">Tyre Solutions</span>
           </h1>
           <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Robust chassis, powerful drivetrains, and specialized body configurations for every industry application.
+            Deep tread patterns, reinforced sidewalls, and high load capacity to handle extreme off-highway conditions.
           </p>
         </div>
 
         <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="1">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">LOGISTICS & TRANSPORT</span>
+          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">AGRICULTURE TYRES</span>
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">
-            Efficient Supply Chain<br>
-            <span class="text-[#f5c542]">Solutions</span>
+            Flexible & Durable<br>
+            <span class="text-[#f5c542]">Agri Tyres</span>
           </h1>
           <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Freight carriers, refrigerated vans, and tractor trucks designed for maximum payload and fuel efficiency.
+            Reduce soil compaction while maintaining traction on soft fields with our specialized agricultural tyres.
           </p>
         </div>
 
         <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="2">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">SPECIAL PURPOSE</span>
+          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">INDUSTRIAL TYRES</span>
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">
-            Purpose-Built<br>
-            <span class="text-[#f5c542]">Utility Vehicles</span>
+            Reinforced & Stable<br>
+            <span class="text-[#f5c542]">For Construction & Mining</span>
           </h1>
           <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Garbage compactors, vacuum tankers, aerial platforms, and fire trucks for municipal and industrial needs.
+            Cut-resistant rubber and stiff construction to ensure stability on hard terrain for heavy machinery.
           </p>
         </div>
 
         <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="3">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">CONSTRUCTION & MINING</span>
+          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">HEAVY EQUIPMENT TYRES</span>
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">
-            Rugged & Reliable<br>
-            <span class="text-[#f5c542]">For Tough Terrains</span>
+            Maximum Load & Durability<br>
+            <span class="text-[#f5c542]">For Mining & Quarries</span>
           </h1>
           <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Dump trucks, 4x4 off-road vehicles, and mobile crane trucks built for extreme conditions.
+            Engineered for extreme loads and rough surfaces, ensuring safety and long lifespan on mining and quarry sites.
           </p>
         </div>
 
         <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="4">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">FLEET MANAGEMENT</span>
+          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">ALL TERRAIN TYRES</span>
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">
-            Complete Fleet<br>
-            <span class="text-[#f5c542]">Solutions</span>
+            Versatile Off-Road<br>
+            <span class="text-[#f5c542]">Performance Tyres</span>
           </h1>
           <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            From utility service trucks to ambulances and military vehicles — we have your fleet covered.
+            Adaptable to diverse terrains from mud to gravel, combining traction, durability, and stability for multi-purpose use.
           </p>
         </div>
 
       </div>
 
       <div class="flex flex-wrap gap-4 mt-8 relative z-10">
-        <a href="#vehicles-grid" class="bg-[#f5c542] text-[#01469b] px-7 py-3.5 rounded-full font-semibold text-base hover:bg-white transition-all duration-300 inline-flex items-center gap-2 shadow-lg">
-          Explore Vehicles
+        <a href="#otr-tyres-list" class="bg-[#f5c542] text-[#01469b] px-7 py-3.5 rounded-full font-semibold text-base hover:bg-white transition-all duration-300 inline-flex items-center gap-2 shadow-lg">
+          Explore Tyres
           <i class="fas fa-arrow-right"></i>
-        </a>
-        <a href="contact.html" class="bg-white/10 backdrop-blur-md text-white px-7 py-3.5 rounded-full font-semibold text-base hover:bg-white/20 transition-all duration-300 border border-white/30 inline-flex items-center gap-2">
-          Request Quote
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COMMERCIAL VEHICLES INTRODUCTION SECTION -->
+<!-- OTR INTRODUCTION SECTION -->
 <section class="py-12 md:py-20 bg-white relative overflow-hidden">
   <div class="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
   <div class="absolute bottom-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
@@ -503,36 +542,30 @@
       
       <div class="lg:w-1/2" data-aos="fade-right">
         <span class="inline-block px-3 md:px-4 py-1 md:py-1.5 bg-[#f5c542]/10 text-[#f5c542] rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4">
-          COMMERCIAL FLEET
+          INDUSTRIAL & AGRICULTURAL TYRES
         </span>
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#01469b] mb-4 md:mb-6 leading-tight">
-          Heavy Duty <span class="text-[#f5c542]">Commercial Vehicles</span>
+          OTR Tyres
         </h2>
         <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-4 md:mb-6">
-          Commercial vehicles are engineered to deliver exceptional performance across diverse applications—from urban logistics and waste management to heavy construction and emergency response. Our range features robust chassis designs, powerful drivetrains, and specialized body configurations tailored to meet the unique demands of each industry.
-        </p>
-        <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-4 md:mb-6">
-          Built for durability and operational efficiency, these vehicles incorporate advanced safety systems, fuel-efficient engines, and low-maintenance components.
-        </p>
-        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
-          From 4x4 off-road trucks to refrigerated vans, our comprehensive lineup ensures you find the perfect solution for your fleet requirements.
+          OTR tyres are defined by several core characteristics: deep, specialized tread patterns (from ribbed for hard surfaces to open bars for soft soil) that provide traction and self-cleaning; reinforced sidewalls and cut-resistant rubber compounds to withstand punctures, abrasion, and impacts from debris; high load capacity to support heavy machinery at relatively low speeds (typically 10–30 mph); and flexible or stiff construction depending on application—flexible for agricultural use to reduce soil compaction, stiff for industrial use to enhance stability on hard ground. These features allow OTR tyres to perform reliably in extreme off-highway conditions.
         </p>
       </div>
       
       <div class="lg:w-1/2 relative mt-8 lg:mt-0" data-aos="fade-left">
         <div class="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl">
-          <img src="images/vehicles/intro.jpg" alt="Commercial Vehicles" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" loading="lazy">
+          <img src="images/tyres/1.png" alt="OTR Tyre" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" loading="lazy">
           <div class="absolute inset-0 bg-gradient-to-t from-[#01469b]/50 to-transparent"></div>
         </div>
         
         <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl p-4 md:p-6">
           <div class="flex items-center gap-3 md:gap-4">
             <div class="w-12 h-12 md:w-16 md:h-16 bg-[#f5c542] rounded-lg md:rounded-xl flex items-center justify-center">
-              <i class="fas fa-truck text-2xl md:text-3xl text-[#01469b]"></i>
+              <i class="fas fa-certificate text-2xl md:text-3xl text-[#01469b]"></i>
             </div>
             <div>
-              <p class="text-xs md:text-sm text-gray-500">Fleet Solutions</p>
-              <p class="text-base md:text-lg font-bold text-[#01469b]">25+ Vehicle Models</p>
+              <p class="text-xs md:text-sm text-gray-500">Premium Quality</p>
+              <p class="text-base md:text-lg font-bold text-[#01469b]">ISO 9001 Certified</p>
             </div>
           </div>
         </div>
@@ -541,165 +574,566 @@
   </div>
 </section>
 
-<!-- COMMERCIAL VEHICLES GRID SECTION -->
-<section id="vehicles-grid" class="py-12 md:py-20 bg-white relative overflow-hidden">
-  <div class="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
+<!-- TYRE PRODUCTS GRID SECTION -->
+<section id="otr-tyres-list" class="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+  
+  <div class="absolute top-40 right-0 w-80 h-80 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 left-0 w-96 h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
   
   <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
     
-    <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
-      <span class="inline-block px-3 md:px-4 py-1 md:py-1.5 bg-[#f5c542]/10 text-[#f5c542] rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4">
-        COMMERCIAL VEHICLES
-      </span>
-      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#01469b] mb-3 md:mb-4">Heavy Duty <span class="text-[#f5c542]">Commercial Trucks</span></h2>
-      <p class="text-gray-600 max-w-2xl mx-auto text-base md:text-lg px-4">Complete range of commercial vehicles for every application - from logistics to specialized operations</p>
+    <!-- Section Header -->
+    <div class="text-center mb-12 md:mb-16">
+      <div class="inline-flex items-center gap-2 bg-[#f5c542]/10 px-4 md:px-5 py-2 rounded-full mb-4 md:mb-5">
+        <span class="w-2 h-2 bg-[#f5c542] rounded-full animate-pulse"></span>
+        <span class="text-[#f5c542] font-semibold text-xs md:text-sm tracking-wide">PREMIUM COLLECTION</span>
+      </div>
+      
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#01469b] mb-3 md:mb-5">
+        OTR & <span class="text-[#f5c542]">Agricultural</span> Tyres
+      </h2>
+      
+      <p class="text-gray-600 max-w-2xl mx-auto text-base md:text-lg px-4">
+        Engineered for extreme conditions — from mining sites to agricultural fields
+      </p>
     </div>
 
-    <!-- Vehicles Grid -->
-    <div class="grid">
+    <!-- Filter Buttons -->
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12">
+      <button data-filter="all" class="filter-btn active px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-[#01469b] text-white shadow-lg">
+        All Products (13)
+      </button>
+      <button data-filter="industrial" class="filter-btn px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">
+        Industrial (11)
+      </button>
+      <button data-filter="agricultural" class="filter-btn px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">
+        Agricultural (2)
+      </button>
+    </div>
+
+    <!-- Tyre Grid -->
+    <div class="tyre-grid">
       
-      <!-- Vehicle Cards (25 cards - abbreviated here for brevity, full set in your original) -->
-      <div class="vehicle-card bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl md:shadow-lg md:hover:shadow-2xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up">
-        <div class="relative overflow-hidden image-container bg-gray-100">
-          <img src="images/vehicles/gabage truck.jpg" alt="Garbage Truck" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        </div>
-        <div class="p-4 md:p-5 text-center">
-          <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-1 md:mb-2">Garbage Trucks</h3>
-          <p class="text-gray-500 text-xs md:text-sm">Rear loader and compactor trucks for municipal waste collection</p>
-        </div>
-      </div>
-
-      <div class="vehicle-card bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl md:shadow-lg md:hover:shadow-2xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="50">
-        <div class="relative overflow-hidden image-container bg-gray-100">
-          <img src="images/vehicles/rear loader.jpg" alt="Rear Loader" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        </div>
-        <div class="p-4 md:p-5 text-center">
-          <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-1 md:mb-2">Rear Loader</h3>
-          <p class="text-gray-500 text-xs md:text-sm">Efficient rear-loading refuse collection with high compaction ratio</p>
-        </div>
-      </div>
-
-      <div class="vehicle-card bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl md:shadow-lg md:hover:shadow-2xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="100">
-        <div class="relative overflow-hidden image-container bg-gray-100">
-          <img src="images/vehicles/vacum truck.jpg" alt="Vacuum Truck" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        </div>
-        <div class="p-4 md:p-5 text-center">
-          <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-1 md:mb-2">Vacuum Truck</h3>
-          <p class="text-gray-500 text-xs md:text-sm">Industrial vacuum tankers for liquid and solid waste management</p>
-        </div>
-      </div>
-
-      <div class="vehicle-card bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl md:shadow-lg md:hover:shadow-2xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="150">
-        <div class="relative overflow-hidden image-container bg-gray-100">
-          <img src="images/vehicles/fire truck.jpg" alt="Fire Truck" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        </div>
-        <div class="p-4 md:p-5 text-center">
-          <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-1 md:mb-2">Fire Truck</h3>
-          <p class="text-gray-500 text-xs md:text-sm">Emergency response vehicles with high-capacity pumping systems</p>
+      <!-- Card 1 - E3/L3 W1 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/e3-l3-w1.jpg" alt="E3/L3 W1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              E3/L3-W1
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              E3/L3 <span class="font-light">(W1) Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>17.5-25, 20.5-25, 23.5-25</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>16-20</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless & Tube</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Add remaining 21 vehicle cards here (same structure as above) -->
-      <!-- Vehicle 5-25 from your original code -->
+      <!-- Card 2 - E3/L3 W2 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/e3-l3-w2.webp" alt="E3/L3 W2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              E3/L3-W2
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              E3/L3 <span class="font-light">(W2) Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>17.5-25, 20.5-25, 23.5-25</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>16-20</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless & Tube</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 - R4-1 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/r41.avif" alt="R4-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              R4-1
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              R4-1 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>12.5/80-18</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 - R4-2 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/r4-2.jpeg" alt="R4-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              R4-2
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              R4-2 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>18.4-26, 16.9-24, 16.9-28</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12-14</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 - SKS-1 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks1.jpg" alt="SKS-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-1
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-1 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>10</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 - SKS-2 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks2.webp" alt="SKS-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-2
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-2 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 - SKS-3 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks3.jpeg" alt="SKS-3 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-3
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-3 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 - SKS-4 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks4.jpeg" alt="SKS-4 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-4
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-4 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 9 - SKS-5 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks5.jpeg" alt="SKS-5 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-5
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-5 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 10 - SKS-6 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/sks6.jpeg" alt="SKS-6 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              SKS-6
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              SKS-6 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Size</span>
+                <span>10-16.5</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tubeless</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 11 - TH202 -->
+      <div class="tyre-card industrial">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/th202.jpg" alt="TH202 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              TH202
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              TH202 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>6.00-9, 5.00-8, 7.00-12</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>10-14</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tube Type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 12 - PR-1 Agricultural -->
+      <div class="tyre-card agricultural">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/pr1.avif" alt="PR-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              PR-1
+            </div>
+            <div class="absolute bottom-3 left-3 md:bottom-4 md:left-4 bg-green-500/90 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+              <i class="fas fa-leaf mr-1"></i> Agri
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              PR-1 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>12.4-28, 7.50-16, 13.6-38</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>8-12</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tube Type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 13 - R1-2 Agricultural -->
+      <div class="tyre-card agricultural">
+        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full border border-gray-100">
+          <div class="relative h-48 sm:h-52 md:h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <img src="images/tyres/types/r1-2.jpeg" alt="R1-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute top-3 right-3 md:top-4 md:right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-lg">
+              R1-2
+            </div>
+            <div class="absolute bottom-3 left-3 md:bottom-4 md:left-4 bg-green-500/90 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+              <i class="fas fa-leaf mr-1"></i> Agri
+            </div>
+          </div>
+          <div class="p-4 md:p-5">
+            <h3 class="text-lg md:text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
+              R1-2 <span class="font-light">Pattern</span>
+            </h3>
+            <div class="space-y-2 text-xs md:text-sm text-gray-600">
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">Sizes</span>
+                <span>7.50-16, 12.4-28, 6.50-16</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-gray-100">
+                <span class="font-semibold">PR Rating</span>
+                <span>8-10</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="font-semibold">Type</span>
+                <span>Tube Type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
 
     <!-- CTA -->
-    <div class="text-center mt-8 md:mt-12" data-aos="fade-up">
-      <a href="contact.html" class="inline-flex items-center gap-2 md:gap-3 bg-[#01469b] text-white px-6 md:px-8 py-3 md:py-3.5 rounded-full font-semibold text-sm md:text-base hover:bg-[#f5c542] hover:text-[#01469b] transition-all duration-300 shadow-lg">
-        Contact Us
-        <i class="fas fa-arrow-right"></i>
+    <div class="text-center mt-12 md:mt-16">
+      <a href="contact.html" class="group relative inline-flex items-center gap-2 md:gap-3 bg-[#01469b] text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-semibold text-sm md:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+        <span class="relative z-10">Request a Quote</span>
+        <i class="fas fa-arrow-right relative z-10 group-hover:translate-x-1 transition-transform duration-300"></i>
+        <span class="absolute inset-0 bg-[#f5c542] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
       </a>
+      <p class="text-gray-500 text-xs md:text-sm mt-4">Get expert advice and competitive pricing</p>
     </div>
 
   </div>
 </section>
 
+<!-- Clearfix before footer -->
+<div style="clear: both; width: 100%; height: 1px;"></div>
+
 <!-- FOOTER -->
-<footer class="bg-[#0a1a2f] text-white pt-20 pb-8 relative overflow-hidden">
+<footer class="bg-[#0a1a2f] text-white pt-16 md:pt-20 pb-6 md:pb-8 relative overflow-hidden">
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-0 left-0 w-96 h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
     <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#01469b]/20 rounded-full blur-3xl"></div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-14">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-10 md:mb-14">
       
-      <div class="lg:col-span-4 space-y-5">
+      <div class="lg:col-span-4 space-y-4 md:space-y-5">
         <div class="flex items-center gap-4">
-          <img src="/logo.png" alt="NextMotive Engineering Logo" class="h-16 w-auto object-contain">
+          <img src="/logo.png" alt="NextMotive Logo" class="h-12 md:h-16 w-auto object-contain">
         </div>
-        <p class="text-gray-300 text-base leading-relaxed max-w-md">
-          Engineering the future with precision, innovation, and reliability. We deliver next-level solutions for modern industries.
+        <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
+          Engineering the future with precision, innovation, and reliability.
         </p>
-        <div class="flex gap-5 pt-4">
-          <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
-            <i class="fab fa-linkedin-in text-white text-xl group-hover:text-[#0a1a2f]"></i>
+        <div class="flex gap-4 md:gap-5 pt-2 md:pt-4">
+          <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
+            <i class="fab fa-linkedin-in text-white text-lg md:text-xl"></i>
           </a>
-          <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
-            <i class="fab fa-twitter text-white text-xl group-hover:text-[#0a1a2f]"></i>
+          <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
+            <i class="fab fa-twitter text-white text-lg md:text-xl"></i>
           </a>
-          <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
-            <i class="fab fa-facebook-f text-white text-xl group-hover:text-[#0a1a2f]"></i>
-          </a>
-          <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
-            <i class="fab fa-instagram text-white text-xl group-hover:text-[#0a1a2f]"></i>
+          <a href="#" class="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
+            <i class="fab fa-facebook-f text-white text-lg md:text-xl"></i>
           </a>
         </div>
       </div>
 
       <div class="lg:col-span-2">
-        <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Quick Links</h3>
-        <ul class="space-y-4">
-          <li><a href="#home" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Home</a></li>
-          <li><a href="#about" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">About</a></li>
-          <li><a href="#news" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">News</a></li>
-          <li><a href="#services" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Services</a></li>
+        <h3 class="text-lg md:text-xl font-semibold mb-4 md:mb-5 text-[#f5c542]">Quick Links</h3>
+        <ul class="space-y-3 md:space-y-4">
+          <li><a href="/index.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">Home</a></li>
+          <li><a href="/about.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">About</a></li>
+          <li><a href="/news.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">News</a></li>
+          <li><a href="#services" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">Services</a></li>
         </ul>
       </div>
 
       <div class="lg:col-span-2">
-        <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">More</h3>
-        <ul class="space-y-4">
-          <li><a href="#projects" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Projects</a></li>
-          <li><a href="#partners" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Partners</a></li>
-          <li><a href="#contact" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Contact</a></li>
-          <li><a href="#careers" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Careers</a></li>
+        <h3 class="text-lg md:text-xl font-semibold mb-4 md:mb-5 text-[#f5c542]">More</h3>
+        <ul class="space-y-3 md:space-y-4">
+          <li><a href="/projects.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">Projects</a></li>
+          <li><a href="/partners.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">Partners</a></li>
+          <li><a href="/contact.html" class="text-gray-300 hover:text-[#f5c542] transition-colors text-sm md:text-base">Contact</a></li>
         </ul>
       </div>
 
       <div class="lg:col-span-4">
-        <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Get In Touch</h3>
-        <div class="space-y-5">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-              <i class="fas fa-map-marker-alt text-[#f5c542] text-lg"></i>
+        <h3 class="text-lg md:text-xl font-semibold mb-4 md:mb-5 text-[#f5c542]">Get In Touch</h3>
+        <div class="space-y-4 md:space-y-5">
+          <div class="flex items-start gap-3 md:gap-4">
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-map-marker-alt text-[#f5c542] text-base md:text-lg"></i>
             </div>
-            <p class="text-gray-300 text-base leading-relaxed">No.11 Kossinna Road, Prakandeniya, Imbulgoda</p>
+            <p class="text-gray-300 text-sm md:text-base">No.11 Kossinna Road, Prakandeniya, Imbulgoda</p>
           </div>
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-phone-alt text-[#f5c542] text-lg"></i>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-phone-alt text-[#f5c542] text-base md:text-lg"></i>
             </div>
-            <p class="text-gray-300 text-base">077 1743606</p>
+            <p class="text-gray-300 text-sm md:text-base">077 1743606</p>
           </div>
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-envelope text-[#f5c542] text-lg"></i>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-envelope text-[#f5c542] text-base md:text-lg"></i>
             </div>
-            <p class="text-gray-300 text-base">info@nextmotive.com</p>
+            <p class="text-gray-300 text-sm md:text-base">info@nextmotive.com</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="pt-10 mt-10 border-t border-white/10">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-5">
-        <div class="text-gray-300 text-base text-center md:text-left">
+    <div class="pt-6 md:pt-10 mt-6 md:mt-10 border-t border-white/10">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-5">
+        <div class="text-gray-300 text-sm md:text-base text-center md:text-left">
           © 2025 NextMotive Engineering. All rights reserved.
         </div>
-        <div class="text-gray-300 text-base text-center md:text-right">
+        <div class="text-gray-300 text-sm md:text-base text-center md:text-right">
           Design & Developed by <span class="text-[#f5c542] font-semibold">devCODE</span>
         </div>
       </div>
@@ -710,17 +1144,17 @@
 </div><!-- END MAIN CONTENT -->
 
 <!-- Back to Top Button -->
-<button id="backToTop" class="fixed bottom-8 right-8 z-50 bg-[#f5c542] text-[#01469b] w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-300 opacity-0 invisible" aria-label="Back to top">
-  <i class="fas fa-arrow-up text-xl"></i>
+<button id="backToTop" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#f5c542] text-[#01469b] w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-300 opacity-0 invisible" aria-label="Back to top">
+  <i class="fas fa-arrow-up text-lg md:text-xl"></i>
 </button>
 
-<!-- Scripts -->
+<!-- AOS Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="script.js"></script>
 
+<!-- All JavaScript -->
 <script>
   // Initialize AOS
-  AOS.init({ duration: 800, once: true });
+  AOS.init({ duration: 800, once: true, offset: 100 });
   
   // Mobile Menu
   document.addEventListener('DOMContentLoaded', function() {
@@ -781,7 +1215,13 @@
         else indicator.classList.remove('active');
       });
       
-      resetProgress();
+      if (progressBar) {
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+        void progressBar.offsetWidth;
+        progressBar.style.transition = 'width 5s linear';
+        progressBar.style.width = '100%';
+      }
     }
 
     function nextSlide() {
@@ -789,28 +1229,46 @@
       showSlide(currentSlide);
     }
 
-    function resetProgress() {
-      if (!progressBar) return;
-      progressBar.style.transition = 'none';
-      progressBar.style.width = '0%';
-      void progressBar.offsetWidth;
-      progressBar.style.transition = 'width 5s linear';
-      progressBar.style.width = '100%';
-    }
-
-    function startAutoPlay() {
-      slideInterval = setInterval(nextSlide, 5000);
-    }
-
     window.goToSlide = function(index) {
       currentSlide = index;
       showSlide(currentSlide);
       clearInterval(slideInterval);
-      startAutoPlay();
+      slideInterval = setInterval(nextSlide, 5000);
     };
 
     showSlide(0);
-    startAutoPlay();
+    slideInterval = setInterval(nextSlide, 5000);
+  });
+
+  // Filter Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.tyre-card');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filterValue = this.getAttribute('data-filter');
+        
+        filterBtns.forEach(b => {
+          b.classList.remove('active', 'bg-[#01469b]', 'text-white');
+          b.classList.add('bg-gray-100', 'text-[#01469b]');
+        });
+        this.classList.add('active', 'bg-[#01469b]', 'text-white');
+        this.classList.remove('bg-gray-100', 'text-[#01469b]');
+        
+        cards.forEach(card => {
+          if (filterValue === 'all') {
+            card.classList.remove('hidden-card');
+          } else {
+            if (card.classList.contains(filterValue)) {
+              card.classList.remove('hidden-card');
+            } else {
+              card.classList.add('hidden-card');
+            }
+          }
+        });
+      });
+    });
   });
 
   // Back to Top

@@ -1288,6 +1288,32 @@
     });
   });
 </script>
-
+<script>
+  // Mobile-specific top bar hide on scroll - OTR Tyres page fix
+  (function() {
+    const topBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
+    
+    if (topBar && navbar) {
+      let lastScrollY = window.scrollY;
+      
+      window.addEventListener('scroll', function() {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > 50) {
+          topBar.style.transform = 'translateY(-100%)';
+          topBar.style.transition = 'transform 0.3s ease-in-out';
+          navbar.style.top = '0';
+          navbar.style.transition = 'top 0.3s ease-in-out';
+        } else {
+          topBar.style.transform = 'translateY(0)';
+          navbar.style.top = '32px';
+        }
+        
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    }
+  })();
+</script>
 </body>
 </html>

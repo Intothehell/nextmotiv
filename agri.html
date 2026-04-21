@@ -564,31 +564,31 @@
 
       <!-- Carousel Slides with 5 Different Images -->
       <div class="carousel-slide active" data-slide="0">
-        <img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?q=80&w=2070&auto=format&fit=crop"
+        <img src="images/tractors/slide1.png"
           alt="Industrial Compressor" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
       </div>
 
       <div class="carousel-slide" data-slide="1">
-        <img src="https://images.unsplash.com/photo-1581092335871-4c7c93c2a5c5?q=80&w=2070&auto=format&fit=crop"
+        <img src="images/tractors/slide2.png"
           alt="Pneumatic Tools" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
       </div>
 
       <div class="carousel-slide" data-slide="2">
-        <img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?q=80&w=2059&auto=format&fit=crop"
+        <img src="images/tractors/slide3.png"
           alt="Agriculture Equipment" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
       </div>
 
       <div class="carousel-slide" data-slide="3">
-        <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop"
+        <img src="images/tractors/slide4.png"
           alt="Construction Site" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
       </div>
 
       <div class="carousel-slide" data-slide="4">
-        <img src="https://images.unsplash.com/photo-1581092335871-4c7c93c2a5c5?q=80&w=2070&auto=format&fit=crop"
+        <img src="images/tractors/slide5.png"
           alt="Manufacturing Plant" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
       </div>
@@ -1050,7 +1050,7 @@
       <div class="grid md:grid-cols-3 gap-8">
         <div class="group cursor-pointer">
           <div class="h-96 rounded-3xl overflow-hidden mb-4 shadow-xl">
-            <img src="https://images.unsplash.com/photo-1576015771620-1a9f0cb5fbe3?q=80&w=2070"
+            <img src="images/tractors/50-70.png"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
           </div>
           <h3 class="text-3xl font-bold text-[#01469b]">Compact Series</h3>
@@ -1060,7 +1060,7 @@
         </div>
         <div class="group cursor-pointer">
           <div class="h-96 rounded-3xl overflow-hidden mb-4 shadow-xl">
-            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=2070"
+            <img src="images/tractors/70-100.png"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
           </div>
           <h3 class="text-3xl font-bold text-[#01469b]">Utility Series</h3>
@@ -1070,7 +1070,7 @@
         </div>
         <div class="group cursor-pointer">
           <div class="h-96 rounded-3xl overflow-hidden mb-4 shadow-xl">
-            <img src="https://images.unsplash.com/photo-1598046889913-a4a5e326e836?q=80&w=2070"
+            <img src="images/tractors/100-122.png"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
           </div>
           <h3 class="text-3xl font-bold text-[#01469b]">Heavy Duty Series</h3>
@@ -1193,6 +1193,151 @@
   <!-- AOS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>AOS.init({ duration: 1000, once: true });</script>
+
+  <!-- Page-specific JavaScript -->
+<script>
+  // Initialize AOS
+  AOS.init({ duration: 800, once: true, offset: 100 });
+
+  // Everything in one DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== MOBILE MENU =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
+    const servicesSubmenu = document.getElementById('servicesSubmenu');
+    const servicesArrow = document.getElementById('servicesArrow');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    function openMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+        if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) {
+          servicesSubmenu.classList.add('hidden');
+          if (servicesArrow) servicesArrow.classList.remove('rotate-180');
+        }
+      }
+    }
+
+    // Services Accordion
+    if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
+      mobileServicesBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        servicesSubmenu.classList.toggle('hidden');
+        servicesArrow.classList.toggle('rotate-180');
+      });
+    }
+
+    // Menu toggle
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMenu);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+    mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+        closeMenu();
+      }
+    });
+
+    // ===== TOP BAR HIDE ON SCROLL =====
+    const topBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
+    
+    if (topBar && navbar) {
+      window.addEventListener('scroll', function() {
+        const currentScroll = window.scrollY;
+        if (currentScroll > 50) {
+          topBar.style.transform = 'translateY(-100%)';
+          navbar.style.top = '0';
+        } else {
+          topBar.style.transform = 'translateY(0)';
+          navbar.style.top = '32px';
+        }
+      }, { passive: true });
+    }
+
+    // ===== CAROUSEL =====
+    const slides = document.querySelectorAll('.carousel-slide');
+    const textItems = document.querySelectorAll('.text-item');
+    const indicators = document.querySelectorAll('.indicator');
+    const progressBar = document.getElementById('progressBar');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let slideInterval;
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+      
+      textItems.forEach(item => item.classList.add('opacity-0'));
+      textItems[index].classList.remove('opacity-0');
+      
+      indicators.forEach((indicator, i) => {
+        if (i === index) indicator.classList.add('active');
+        else indicator.classList.remove('active');
+      });
+      
+      if (progressBar) {
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+        void progressBar.offsetWidth;
+        progressBar.style.transition = 'width 5s linear';
+        progressBar.style.width = '100%';
+      }
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    }
+
+    window.goToSlide = function(index) {
+      currentSlide = index;
+      showSlide(currentSlide);
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 5000);
+    };
+
+    if (slides.length > 0) {
+      showSlide(0);
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    const heroSection = document.querySelector('.hero-section');
+    if (heroSection) {
+      heroSection.addEventListener('mouseenter', () => clearInterval(slideInterval));
+      heroSection.addEventListener('mouseleave', () => {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+      });
+    }
+
+    // ===== BACK TO TOP =====
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backBtn.classList.remove('opacity-0', 'invisible');
+        backBtn.classList.add('opacity-100', 'visible');
+      } else {
+        backBtn.classList.add('opacity-0', 'invisible');
+        backBtn.classList.remove('opacity-100', 'visible');
+      }
+    });
+    backBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  });
+</script>
+
 </body>
 
 </html>

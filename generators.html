@@ -639,8 +639,78 @@
 
 <!-- Page-specific JavaScript -->
 <script>
-  // Carousel functionality
+  // Initialize AOS
+  AOS.init({ duration: 800, once: true, offset: 100 });
+
+  // Everything in one DOMContentLoaded
   document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== MOBILE MENU =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
+    const servicesSubmenu = document.getElementById('servicesSubmenu');
+    const servicesArrow = document.getElementById('servicesArrow');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    function openMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+        if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) {
+          servicesSubmenu.classList.add('hidden');
+          if (servicesArrow) servicesArrow.classList.remove('rotate-180');
+        }
+      }
+    }
+
+    // Services Accordion
+    if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
+      mobileServicesBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        servicesSubmenu.classList.toggle('hidden');
+        servicesArrow.classList.toggle('rotate-180');
+      });
+    }
+
+    // Menu toggle
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMenu);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+    mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+        closeMenu();
+      }
+    });
+
+    // ===== TOP BAR HIDE ON SCROLL =====
+    const topBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
+    
+    if (topBar && navbar) {
+      window.addEventListener('scroll', function() {
+        const currentScroll = window.scrollY;
+        if (currentScroll > 50) {
+          topBar.style.transform = 'translateY(-100%)';
+          navbar.style.top = '0';
+        } else {
+          topBar.style.transform = 'translateY(0)';
+          navbar.style.top = '32px';
+        }
+      }, { passive: true });
+    }
+
+    // ===== CAROUSEL =====
     const slides = document.querySelectorAll('.carousel-slide');
     const textItems = document.querySelectorAll('.text-item');
     const indicators = document.querySelectorAll('.indicator');
@@ -687,7 +757,6 @@
       slideInterval = setInterval(nextSlide, 5000);
     }
 
-    // Pause on hover
     const heroSection = document.querySelector('.hero-section');
     if (heroSection) {
       heroSection.addEventListener('mouseenter', () => clearInterval(slideInterval));
@@ -696,25 +765,19 @@
         slideInterval = setInterval(nextSlide, 5000);
       });
     }
-  });
 
-  // Mobile menu fix
-  document.addEventListener('DOMContentLoaded', function() {
-    const topBar = document.getElementById('topInfoBar');
-    const navbar = document.getElementById('navbar');
-    
-    if (topBar && navbar) {
-      window.addEventListener('scroll', function() {
-        const currentScroll = window.scrollY;
-        if (currentScroll > 50) {
-          topBar.style.transform = 'translateY(-100%)';
-          navbar.style.top = '0';
-        } else {
-          topBar.style.transform = 'translateY(0)';
-          navbar.style.top = '32px';
-        }
-      }, { passive: true });
-    }
+    // ===== BACK TO TOP =====
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backBtn.classList.remove('opacity-0', 'invisible');
+        backBtn.classList.add('opacity-100', 'visible');
+      } else {
+        backBtn.classList.add('opacity-0', 'invisible');
+        backBtn.classList.remove('opacity-100', 'visible');
+      }
+    });
+    backBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   });
 </script>
 

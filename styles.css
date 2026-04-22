@@ -188,7 +188,7 @@ body::-webkit-scrollbar {
 }
 
 .logo-img {
-  height: 45px;
+  height: 60px !important;
   width: auto;
   object-fit: contain;
 }

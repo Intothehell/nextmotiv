@@ -1,86 +1,168 @@
-// script.js - With AOS initialization and preloader
 window.addEventListener('load', function() {
-  // --- SLOWER PRELOADER ANIMATION ---
   const preloader = document.getElementById('preloader');
-  const left = document.getElementById('preloaderLeft');
-  const right = document.getElementById('preloaderRight');
-  const leftContent = document.getElementById('leftContent');
-  const rightContent = document.getElementById('rightContent');
   const main = document.getElementById('main-content');
   const topBar = document.getElementById('topInfoBar');
-
-  gsap.set([leftContent, rightContent], { opacity: 0, scale: 0.9 });
+  
+  // Get all SVG elements to animate
+  const svgElements = document.querySelectorAll('#logo-svg path, #logo-svg polygon, #logo-svg polyline');
+  
+  console.log('Found SVG elements to animate:', svgElements.length);
+  
+  // Set initial states
   gsap.set(main, { opacity: 0 });
-  gsap.set(preloader, { opacity: 1, display: 'flex' });
-  gsap.set(topBar, { opacity: 0 });
-
-  const tl = gsap.timeline({
-    defaults: { ease: 'power2.out' }
+  if (topBar) gsap.set(topBar, { opacity: 0 });
+  gsap.set('.preloader-text, .preloader-subtitle, .preloader-progress', { opacity: 0 });
+  
+  // Create timeline
+  const tl = gsap.timeline();
+  
+  // If no SVG elements found, just do a simple fade in/out
+  if (svgElements.length === 0) {
+    console.warn('No SVG elements found, using fallback animation');
+    
+    tl.to('.preloader-text', { opacity: 1, duration: 1, y: 20 })
+      .to('.preloader-progress', { opacity: 1, duration: 0.5 })
+      .to('.preloader-progress-bar', { width: '100%', duration: 2 })
+      .to(preloader, { opacity: 0, duration: 1, delay: 1, onComplete: () => {
+        preloader.style.display = 'none';
+      }})
+      .to(main, { opacity: 1, duration: 1 }, '-=0.5')
+      .to(topBar, { opacity: 1, duration: 0.8 }, '-=0.3');
+    
+    if (typeof AOS !== 'undefined') {
+      setTimeout(() => AOS.init(), 3000);
+    }
+    
+    // Initialize other features after preloader
+    initOtherFeatures();
+    return;
+  }
+  
+  // Prepare each SVG element for drawing animation
+  svgElements.forEach((element, index) => {
+    // Get or set stroke color based on original class
+    let strokeColor = '#ffffff';
+    if (element.classList.contains('cls-1')) strokeColor = '#fec20e';
+    if (element.classList.contains('cls-2')) strokeColor = '#5365af';
+    if (element.classList.contains('cls-3')) strokeColor = '#6d5623';
+    if (element.classList.contains('cls-4')) strokeColor = '#6e5723';
+    if (element.classList.contains('cls-5')) strokeColor = '#bc9e2f';
+    if (element.classList.contains('cls-6')) strokeColor = '#bd9e2f';
+    if (element.classList.contains('cls-7')) strokeColor = '#5366af';
+    if (element.classList.contains('cls-8')) strokeColor = '#4f3b15';
+    
+    gsap.set(element, {
+      stroke: strokeColor,
+      strokeWidth: 2,
+      strokeDasharray: 2000,
+      strokeDashoffset: 2000,
+      fillOpacity: 0
+    });
+    
+    // Staggered drawing animation
+    tl.to(element, {
+      strokeDashoffset: 0,
+      duration: 1.6,
+      ease: 'power2.inOut'
+    }, index * 0.02)
+    .to(element, {
+      fillOpacity: 1,
+      duration: 1,
+      ease: 'power2.out'
+    }, index * 0.02 + 0.5);
   });
-
-  tl.to([leftContent, rightContent], {
+  
+  // Fade in text elements
+  tl.to('.preloader-text', {
     opacity: 1,
-    scale: 1,
+    duration: 0.8,
+    ease: 'back.out(0.5)'
+  }, 1.0)
+  .to('.preloader-subtitle', {
+    opacity: 1,
+    duration: 0.6
+  }, 1.3)
+  .to('.preloader-progress', {
+    opacity: 1,
+    duration: 0.5
+  }, 1.5);
+  
+  // Animate progress bar
+  tl.to('.preloader-progress-bar', {
+    width: '100%',
     duration: 1.5,
-    stagger: 0.2
-  })
-  .to([leftContent, rightContent], {
+    ease: 'power2.inOut'
+  }, 1.8);
+  
+  // Fade out preloader and show content
+  tl.to(preloader, {
     opacity: 0,
-    scale: 0.8,
-    duration: 1.0,
-    delay: 2.0
-  })
-  .to(left, {
-    x: '-100%',
-    duration: 2.0,
-    ease: 'power4.inOut'
-  }, 0)
-  .to(right, {
-    x: '100%',
-    duration: 2.0,
-    ease: 'power4.inOut'
-  }, 0)
-  .to(preloader, {
-    opacity: 0,
-    duration: 0.6,
+    duration: 0.8,
+    ease: 'power2.inOut',
     onComplete: function() {
       preloader.style.display = 'none';
       preloader.style.pointerEvents = 'none';
+      // Initialize other features after preloader completes
+      initOtherFeatures();
     }
-  }, 1.8)
+  }, 3.5)
   .to(main, {
     opacity: 1,
-    duration: 1.5
-  }, 1.0)
-  .to(topBar, {
-    opacity: 1,
-    duration: 1.0
-  }, 1.5)
-  .add(() => {
-    // Initialize AOS after preloader with modern settings
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100,
-      easing: 'ease-out-cubic',
-      delay: 50,
-      mirror: false
-    });
+    duration: 1.2,
+    ease: 'power2.out'
+  }, 3.0);
+  
+  if (topBar) {
+    tl.to(topBar, {
+      opacity: 1,
+      duration: 0.8
+    }, 3.2);
+  }
+  
+  // Initialize AOS
+  tl.add(() => {
+    if (typeof AOS !== 'undefined') {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+        easing: 'ease-out-cubic',
+        delay: 50,
+        mirror: false
+      });
+    }
   });
+  
+  // Fallback
+  setTimeout(() => {
+    if (preloader.style.display !== 'none') {
+      console.log('Forcing preloader completion');
+      preloader.style.display = 'none';
+      gsap.set(main, { opacity: 1 });
+      if (topBar) gsap.set(topBar, { opacity: 1 });
+      initOtherFeatures();
+    }
+  }, 6000);
+});
 
+// Function to initialize all other features
+function initOtherFeatures() {
+  console.log('Initializing other features...');
+  
   // --- TOP BAR HIDE ON SCROLL ---
   const navbar = document.getElementById('navbar');
+  const topBar = document.getElementById('topInfoBar');
   let lastScroll = 0;
 
   window.addEventListener('scroll', function() {
     const currentScroll = window.pageYOffset;
     
     if (currentScroll > 50) {
-      topBar.classList.add('hidden');
-      navbar.style.top = '0';
+      if (topBar) topBar.classList.add('hidden');
+      if (navbar) navbar.style.top = '0';
     } else {
-      topBar.classList.remove('hidden');
-      navbar.style.top = '32px';
+      if (topBar) topBar.classList.remove('hidden');
+      if (navbar) navbar.style.top = '32px';
     }
     
     lastScroll = currentScroll;
@@ -117,6 +199,7 @@ window.addEventListener('load', function() {
   }
 
   function startCarousel() {
+    if (intervalId) clearInterval(intervalId);
     intervalId = setInterval(nextSlide, 4500);
   }
 
@@ -134,12 +217,14 @@ window.addEventListener('load', function() {
   });
 
   const landingSection = document.querySelector('.landing-section');
-  landingSection.addEventListener('mouseenter', () => {
-    clearInterval(intervalId);
-  });
-  landingSection.addEventListener('mouseleave', () => {
-    startCarousel();
-  });
+  if (landingSection) {
+    landingSection.addEventListener('mouseenter', () => {
+      clearInterval(intervalId);
+    });
+    landingSection.addEventListener('mouseleave', () => {
+      startCarousel();
+    });
+  }
 
   // --- SCROLL DOWN BUTTON ---
   const scrollBtn = document.getElementById('scrollDown');
@@ -180,52 +265,62 @@ window.addEventListener('load', function() {
   serviceLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.stopPropagation(); // Prevent card flip from interfering
-      // In a real implementation, you would navigate to the actual page
-      // window.location.href = this.getAttribute('href');
       console.log('Navigate to:', this.getAttribute('href'));
       alert('In production, this would navigate to: ' + this.getAttribute('href'));
     });
   });
-});
+}
 
-
+// Canvas dots animation (runs independently)
 const canvas = document.getElementById('dots-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const particles = [];
-const particleCount = 120;
-
-for(let i=0; i<particleCount; i++){
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 1,
-    dx: (Math.random()-0.5)*0.5,
-    dy: (Math.random()-0.5)*0.5
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  
+  resizeCanvas();
+  
+  const particles = [];
+  const particleCount = 120;
+  
+  for(let i = 0; i < particleCount; i++){
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5
+    });
+  }
+  
+  function animateDots() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 255, 255, 0.4)';
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      
+      if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animateDots);
+  }
+  
+  animateDots();
+  
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    // Reposition particles on resize
+    particles.forEach(p => {
+      p.x = Math.random() * canvas.width;
+      p.y = Math.random() * canvas.height;
+    });
   });
 }
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle = 'rgba(0,255,255,0.4)';
-    ctx.fill();
-    p.x += p.dx;
-    p.y += p.dy;
-
-    if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
-    if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
-  });
-  requestAnimationFrame(animate);
-}
-animate();
-
-window.addEventListener('resize', ()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-

@@ -110,63 +110,103 @@ body::-webkit-scrollbar {
   opacity: 0.9;
 }
 
-/* === PRELOADER === */
+
+
+/* === PRELOADER WITH DRAWING ANIMATION === */
 #preloader {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
 }
 
-.preloader-left,
-.preloader-right {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #01469b;
+.preloader-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.preloader-svg-wrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 30px;
   position: relative;
-  overflow: hidden;
 }
 
-.preloader-right {
-  background: #f5c542;
+#logo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.preloader-content {
-  color: white;
-  font-size: 2.2rem;
+/* Force stroke properties for all SVG elements */
+#logo-svg path,
+#logo-svg polygon,
+#logo-svg polyline {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill-opacity: 0;
+}
+
+.preloader-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 700;
+  color: #f5c542;
   letter-spacing: -0.02em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 20px;
   opacity: 0;
-  transform: scale(0.9);
+  font-family: 'Outfit', sans-serif;
 }
 
-.preloader-right .preloader-content {
-  color: #01469b;
+.preloader-subtitle {
+  font-size: clamp(0.75rem, 3vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.3em;
+  margin-top: 10px;
+  opacity: 0;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
 }
 
-.preloader-logo {
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 30% 70% 70% 30% / 30% 55% 45% 70%;
-  margin-bottom: 1rem;
-  border: 3px solid currentColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  font-weight: 700;
+.preloader-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  opacity: 0;
 }
 
+.preloader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f5c542, #fec20e);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .preloader-svg-wrapper {
+    max-width: 200px;
+  }
+  .preloader-progress {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-svg-wrapper {
+    max-width: 150px;
+  }
+}
 /* === NAVIGATION BAR === */
 .navbar {
   background: rgba(255, 255, 255, 0.92);

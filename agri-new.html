@@ -863,6 +863,14 @@
     const heroSection = document.querySelector('.hero-section');
     if (heroSection) { heroSection.addEventListener('mouseenter', () => clearInterval(slideInterval)); heroSection.addEventListener('mouseleave', () => { clearInterval(slideInterval); slideInterval = setInterval(nextSlide, 5000); }); }
 
+    // Scroll Progress
+    const scrollBar = document.getElementById('scrollProgressBar');
+    window.addEventListener('scroll', () => { const winScroll = document.body.scrollTop || document.documentElement.scrollTop; const height = document.documentElement.scrollHeight - document.documentElement.clientHeight; const scrolled = (winScroll / height) * 100; if (scrollBar) scrollBar.style.width = scrolled + '%'; });
+
+    // Top Bar Hide
+    const topBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
+    if (topBar && navbar) { window.addEventListener('scroll', () => { if (window.scrollY > 50) { topBar.style.transform = 'translateY(-100%)'; navbar.style.top = '0'; } else { topBar.style.transform = 'translateY(0)'; navbar.style.top = '32px'; } }, { passive: true }); }
 
     // Back to Top
     const backBtn = document.getElementById('backToTop');

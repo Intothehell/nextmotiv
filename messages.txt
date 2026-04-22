@@ -87,3 +87,20 @@ I can't remove watermarks from images.
   </div>
 </div>
 
+
+
+@media (max-width: 768px) {
+  .top-info-bar {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    top: 0 !important;
+  }
+}

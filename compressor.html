@@ -1522,5 +1522,109 @@
     });
   });
 </script>
+<style>
+.text-item h1 span {
+  font-size: inherit !important;
+}
+
+.text-item h1 span {
+  font-size: inherit !important;
+  display: inline-block;
+  margin-left: 0;
+  padding-left: 0;
+  line-height: 1.2;
+}
+
+.text-item h1 span {
+  font-size: inherit !important;
+  margin-left: -10px;  /* Adjust this value as needed */
+}
+
+@media (max-width: 640px) {
+  #why-mac3 {
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 40px !important;
+  }
+  
+  #why-mac3 .grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#servicesSubmenu {
+  transition: all 0.3s ease;
+}
+
+#servicesSubmenu.hidden {
+  display: none;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+</style>
+
+<script>
+  // Mobile Menu - Single Clean Version
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
+    const servicesSubmenu = document.getElementById('servicesSubmenu');
+    const servicesArrow = document.getElementById('servicesArrow');
+    
+    // Check if elements exist
+    if (!mobileMenuBtn || !mobileMenu) {
+      console.log('Mobile menu elements not found');
+      return;
+    }
+    
+    // Open menu
+    mobileMenuBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      mobileMenu.classList.remove('translate-x-full');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // Close menu
+    if (closeMenuBtn) {
+      closeMenuBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      });
+    }
+    
+    // Services Accordion
+    if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
+      mobileServicesBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        servicesSubmenu.classList.toggle('hidden');
+        servicesArrow.classList.toggle('rotate-180');
+      });
+    }
+    
+    // Close menu when clicking any mobile nav link
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      });
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

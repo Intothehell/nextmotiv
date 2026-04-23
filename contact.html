@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>NextMotive | Home</title>
   <link rel="icon" href="small logo.png">
   <!-- Tailwind CSS -->
@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<!-- TOP YELLOW INFO BAR - Always visible on mobile -->
+<!-- TOP YELLOW INFO BAR - Always visible on desktop, hidden on mobile via JS -->
 <div id="topInfoBar" class="top-info-bar">
   <div class="info-bar-container">
     <div class="info-item left">
@@ -33,7 +33,7 @@
     </div>
     <div class="info-item right">
       <i class="fas fa-registered"></i>
-      <span class="truncate">REG # 2025-ENG-4472</span>
+      <span class="truncate">REG : PV 00360487 </span>
     </div>
   </div>
 </div>
@@ -108,12 +108,12 @@
       <!-- Dropdown Menu -->
       <div class="absolute top-full left-0 mt-0 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
         <div class="py-2">
-          <a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
+          <!--<a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-industry w-5 text-[#f5c542]"></i>
               <span class="font-medium">Construction & Mining Equipment</span>
             </div>
-          </a>
+          </a>-->
           <a href="/compressor.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
               <i class="fas fa-wind w-5 text-[#f5c542]"></i>
@@ -140,13 +140,13 @@
           </a>
           <a href="/otr-tyres.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+              <i class="fas fa-circle w-5 text-[#f5c542]"></i>
               <span class="font-medium">OTR Tyres</span>
             </div>
           </a>
           <a href="/generators.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
             <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+              <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
               <span class="font-medium">Generators</span>
             </div>
           </a>
@@ -195,10 +195,10 @@
         
         <!-- Services Submenu (hidden by default) -->
         <div id="servicesSubmenu" class="hidden mt-2 ml-4 space-y-3 border-l-2 border-[#f5c542]/30 pl-4">
-          <a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
+          <!--<a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-industry w-5 text-[#f5c542]"></i>
             <span>Construction & Mining Equipment</span>
-          </a>
+          </a>-->
           <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
             <i class="fas fa-wind w-5 text-[#f5c542]"></i>
             <span>Compressors</span>
@@ -216,11 +216,11 @@
             <span>Comercial Vehicles</span>
           </a>
           <a href="otr-tyres.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+            <i class="fas fa-circle w-5 text-[#f5c542]"></i>
             <span>OTR Tyres</span>
           </a>
           <a href="generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
+            <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
             <span>Generators</span>
           </a>
         </div>
@@ -254,9 +254,9 @@
   </div>
 </div>
 
-<!-- JavaScript for mobile menu and accordion functionality -->
+<!-- JavaScript for mobile menu, accordion, and info bar fixes -->
 <script>
-  // Mobile Menu Toggle and Accordion
+  // Mobile Menu Toggle, Accordion, and Info Bar Fixes
   document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
@@ -264,9 +264,41 @@
     const mobileServicesBtn = document.getElementById('mobileServicesBtn');
     const servicesSubmenu = document.getElementById('servicesSubmenu');
     const servicesArrow = document.getElementById('servicesArrow');
+    const topInfoBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
     
     // Get all mobile nav links except the services button
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
+
+    // Fix for info bar on mobile - force hide it
+    function handleInfoBarForMobile() {
+      if (topInfoBar) {
+        if (window.innerWidth <= 768) {
+          topInfoBar.style.display = 'none';
+          topInfoBar.style.opacity = '0';
+          topInfoBar.style.visibility = 'hidden';
+        } else {
+          topInfoBar.style.display = 'block';
+          topInfoBar.style.opacity = '1';
+          topInfoBar.style.visibility = 'visible';
+        }
+      }
+      
+      // Fix navbar position on mobile
+      if (navbar) {
+        if (window.innerWidth <= 768) {
+          navbar.style.top = '0';
+        } else {
+          navbar.style.top = '32px';
+        }
+      }
+    }
+
+    // Run on load
+    handleInfoBarForMobile();
+    
+    // Run on resize
+    window.addEventListener('resize', handleInfoBarForMobile);
 
     function openMenu() {
       mobileMenu.classList.remove('translate-x-full');
@@ -307,16 +339,25 @@
 
     // Handle escape key
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+      if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
         closeMenu();
       }
     });
+    
+    // Close menu when clicking outside (on overlay)
+    if (mobileMenu) {
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          closeMenu();
+        }
+      });
+    }
   });
 </script>
 
 <!-- CSS for navigation and dropdowns -->
 <style>
-  /* Top Info Bar - always visible */
+  /* Top Info Bar - always visible on desktop, hidden on mobile */
   .top-info-bar {
     background: #f5c542;
     color: #01469b;
@@ -341,12 +382,6 @@
 
   .top-info-bar.hidden {
     transform: translateY(-100%);
-  }
-
-  @media (max-width: 768px) {
-    .top-info-bar {
-      display: block;
-    }
   }
 
   .info-bar-container {
@@ -374,16 +409,11 @@
 
   /* Navbar styling */
   .navbar {
-    top: 32px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      top: 32px;
-    }
+    transition: top 0.3s ease-in-out;
   }
 
   /* Nav link styling */
@@ -438,7 +468,7 @@
 
   /* Mobile menu overlay */
   #mobileMenu {
-    z-index: 100;
+    z-index: 9999;
     background: linear-gradient(135deg, #01469b 0%, #002b5e 100%);
   }
   
@@ -472,9 +502,18 @@
   .rotate-180 {
     transform: rotate(180deg);
   }
+  
+  /* Mobile responsive fixes */
+  @media (max-width: 768px) {
+    .navbar {
+      top: 0 !important;
+    }
+    
+    .logo-img {
+      height: 40px;
+    }
+  }
 </style>
-
-
 
 <br>
 <section class="relative w-full h-[300px] md:h-[400px] overflow-hidden">
@@ -528,7 +567,7 @@
           </div>
           <div>
             <h4 class="font-semibold text-[#0a1a2f] text-lg mb-1">Our Office</h4>
-            <p class="text-gray-700">No.11 Kossinna Road, Parakadeniya,<br>Imbulgoda, Sri Lanka</p>
+            <p class="text-gray-700">No.304 , Kandy Road , Kirillawala , <br>Weboda, Sri Lanka.</p>
           </div>
         </div>
 
@@ -542,7 +581,9 @@
             </div>
             <div>
               <p class="text-xs text-gray-600">Hotline</p>
-              <p class="font-semibold text-[#0a1a2f]">077 174 3606</p>
+              <p class="font-semibold text-[#0a1a2f]">+94 77 783 2849  <br> +94 332 217714
+
+              </p>
             </div>
           </div>
 
@@ -559,7 +600,7 @@
 
           <!-- WhatsApp Button - Full width on mobile, spans both columns on sm and up -->
           <div class="sm:col-span-2 mt-2">
-            <a href="https://wa.me/94771743606" target="_blank" 
+            <a href="https://wa.me/94777832849" target="_blank" 
                class="flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#20b859] text-white py-4 rounded-xl font-semibold transition-all group">
               <i class="fab fa-whatsapp text-2xl"></i>
               <span>Chat on WhatsApp</span>
@@ -653,7 +694,7 @@
 <!-- reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<!-- Optional: Add this script to validate checkbox before submission -->
+<!-- Form validation script -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('inquiryForm');
@@ -684,9 +725,12 @@
       <div class="lg:col-span-4 space-y-5">
         <div class="flex items-center gap-4">
           <!-- Logo - using logo.png -->
-          <img src="logo.png" alt="NextMotive Engineering Logo" class="h-16 w-auto object-contain">
+          <img src="logo.png" alt="NextMotive Engineering Logo" class="h-20 w-auto object-contain">
           
         </div>
+        <p class="text-base font-bold tracking-wider font-montserrat max-w-md" style="color: #f5c542;">
+          NEXTMOTIVE ENGINEERING (PVT) LTD.
+        </p>
         <p class="text-gray-300 text-base leading-relaxed max-w-md">
           Engineering the future with precision, innovation, and reliability. We deliver next-level solutions for modern industries.
         </p>
@@ -739,7 +783,7 @@
               <i class="fas fa-map-marker-alt text-[#f5c542] text-lg"></i>
             </div>
             <p class="text-gray-300 text-base leading-relaxed">
-              No.11 Kossinna Road, Prakandeniya, Imbulgoda
+              No.304 , Kandy Road , Kirillawala , Weboda.
             </p>
           </div>
           <!-- Phone -->
@@ -774,6 +818,9 @@
     </div>
   </div>
 </footer>
+
+</div><!-- End of main-content -->
+
   <!-- AOS Library -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <!-- Custom JavaScript -->

@@ -199,149 +199,101 @@
       transition: opacity 0.7s ease-in-out;
     }
 
-    /* Preloader */
-    #preloader {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #01469b;
-      pointer-events: none;
-      transition: opacity 0.6s ease;
-    }
+    /* === PRELOADER WITH DRAWING ANIMATION === */
+#preloader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
 
-    .preloader-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 400px;
-      padding: 0 20px;
-    }
+.preloader-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+}
 
-    .preloader-svg-wrapper {
-      width: 100%;
-      max-width: 300px;
-      margin-bottom: 30px;
-      animation: logoPulse 2s ease-in-out infinite;
-    }
+.preloader-svg-wrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 30px;
+  position: relative;
+}
 
-    #logo-svg {
-      width: 100%;
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
-    }
+#logo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
-    @keyframes logoPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
+/* Force stroke properties for all SVG elements */
+#logo-svg path,
+#logo-svg polygon,
+#logo-svg polyline {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill-opacity: 0;
+}
 
-    .preloader-text {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: white;
-      letter-spacing: -0.02em;
-      font-family: 'Outfit', sans-serif;
-      margin-bottom: 8px;
-    }
+.preloader-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #f5c542;
+  letter-spacing: -0.02em;
+  margin-top: 20px;
+  opacity: 0;
+  font-family: 'Outfit', sans-serif;
+}
 
-    .preloader-text::before {
-      content: 'NEXTMOTIVE';
-    }
+.preloader-subtitle {
+  font-size: clamp(0.75rem, 3vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.3em;
+  margin-top: 10px;
+  opacity: 0;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
 
-    .preloader-subtitle {
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: #f5c542;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      font-family: 'Inter', sans-serif;
-      margin-bottom: 30px;
-    }
+.preloader-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  opacity: 0;
+}
 
-    .preloader-subtitle::before {
-      content: 'ENGINEERING';
-    }
+.preloader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f5c542, #fec20e);
+  border-radius: 2px;
+}
 
-    .preloader-progress {
-      width: 100%;
-      max-width: 250px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-    }
+@media (max-width: 768px) {
+  .preloader-svg-wrapper {
+    max-width: 200px;
+  }
+  .preloader-progress {
+    width: 150px;
+  }
+}
 
-    .preloader-progress-bar {
-      width: 0%;
-      height: 100%;
-      background: #f5c542;
-      border-radius: 10px;
-      animation: progressFill 2.5s ease-in-out forwards 0.5s;
-    }
-
-    @keyframes progressFill {
-      0% { width: 0%; }
-      100% { width: 100%; }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-section {
-        height: 500px !important;
-      }
-
-      .text-item h1 {
-        font-size: 2.5rem !important;
-      }
-
-      .text-item p {
-        font-size: 1rem !important;
-      }
-
-      .indicator.active {
-        width: 28px !important;
-      }
-
-      .preloader-svg-wrapper {
-        max-width: 250px;
-      }
-
-      .preloader-text {
-        font-size: 1.8rem;
-      }
-
-      .preloader-subtitle {
-        font-size: 0.75rem;
-        letter-spacing: 0.2em;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero-section {
-        height: 480px !important;
-      }
-
-      .text-item h1 {
-        font-size: 2rem !important;
-      }
-    }
-
-    /* Text span fixes */
-    .text-item h1 span {
-      font-size: inherit !important;
-      display: inline-block;
-      margin-left: 0;
-      padding-left: 0;
-      line-height: 1.2;
-    }
+@media (max-width: 480px) {
+  .preloader-svg-wrapper {
+    max-width: 150px;
+  }
+}
   </style>
 </head>
 
@@ -427,9 +379,9 @@
     <!-- Services Dropdown -->
     <div class="relative group">
       <button class="nav-link text-base flex items-center gap-1 focus:outline-none" data-text="Services">Services<i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i></button>
-      <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+      <div class="absolute top-full left-0  w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
         <div class="py-2">
-          <a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all"><div class="flex items-center gap-3"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span class="font-medium">Construction & Mining Equipment</span></div></a>
+          <!--<a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all"><div class="flex items-center gap-3"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span class="font-medium">Construction & Mining Equipment</span></div></a>-->
           <a href="/compressor.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all"><div class="flex items-center gap-3"><i class="fas fa-wind w-5 text-[#f5c542]"></i><span class="font-medium">Compressors</span></div></a>
           <a href="/agri.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all"><div class="flex items-center gap-3"><i class="fas fa-tractor w-5 text-[#f5c542]"></i><span class="font-medium">Agriculture Tractors</span></div></a>
           <a href="/spareparts.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all"><div class="flex items-center gap-3"><i class="fas fa-cogs w-5 text-[#f5c542]"></i><span class="font-medium">Spare Parts</span></div></a>
@@ -461,7 +413,7 @@
       <div class="mobile-services-accordion">
         <button id="mobileServicesBtn" class="flex items-center justify-between w-full text-white text-2xl font-semibold py-2 hover:text-[#f5c542] transition-colors"><span>Services</span><i class="fas fa-chevron-down text-xl transition-transform duration-300" id="servicesArrow"></i></button>
         <div id="servicesSubmenu" class="hidden mt-2 ml-4 space-y-3 border-l-2 border-[#f5c542]/30 pl-4">
-          <a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span>Construction & Mining Equipment</span></a>
+          <!--<a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span>Construction & Mining Equipment</span></a>-->
           <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-wind w-5 text-[#f5c542]"></i><span>Compressors</span></a>
           <a href="/agri.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-tractor w-5 text-[#f5c542]"></i><span>Agriculture Tractors</span></a>
           <a href="/spareparts.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-cogs w-5 text-[#f5c542]"></i><span>Spare Parts</span></a>

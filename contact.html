@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>NextMotive | Home</title>
   <link rel="icon" href="small logo.png">
   <!-- Tailwind CSS -->
@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<!-- TOP YELLOW INFO BAR - Always visible on mobile -->
+<!-- TOP YELLOW INFO BAR - Always visible on desktop, hidden on mobile via JS -->
 <div id="topInfoBar" class="top-info-bar">
   <div class="info-bar-container">
     <div class="info-item left">
@@ -254,9 +254,9 @@
   </div>
 </div>
 
-<!-- JavaScript for mobile menu and accordion functionality -->
+<!-- JavaScript for mobile menu, accordion, and info bar fixes -->
 <script>
-  // Mobile Menu Toggle and Accordion
+  // Mobile Menu Toggle, Accordion, and Info Bar Fixes
   document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
@@ -264,9 +264,41 @@
     const mobileServicesBtn = document.getElementById('mobileServicesBtn');
     const servicesSubmenu = document.getElementById('servicesSubmenu');
     const servicesArrow = document.getElementById('servicesArrow');
+    const topInfoBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
     
     // Get all mobile nav links except the services button
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
+
+    // Fix for info bar on mobile - force hide it
+    function handleInfoBarForMobile() {
+      if (topInfoBar) {
+        if (window.innerWidth <= 768) {
+          topInfoBar.style.display = 'none';
+          topInfoBar.style.opacity = '0';
+          topInfoBar.style.visibility = 'hidden';
+        } else {
+          topInfoBar.style.display = 'block';
+          topInfoBar.style.opacity = '1';
+          topInfoBar.style.visibility = 'visible';
+        }
+      }
+      
+      // Fix navbar position on mobile
+      if (navbar) {
+        if (window.innerWidth <= 768) {
+          navbar.style.top = '0';
+        } else {
+          navbar.style.top = '32px';
+        }
+      }
+    }
+
+    // Run on load
+    handleInfoBarForMobile();
+    
+    // Run on resize
+    window.addEventListener('resize', handleInfoBarForMobile);
 
     function openMenu() {
       mobileMenu.classList.remove('translate-x-full');
@@ -307,16 +339,25 @@
 
     // Handle escape key
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+      if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
         closeMenu();
       }
     });
+    
+    // Close menu when clicking outside (on overlay)
+    if (mobileMenu) {
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          closeMenu();
+        }
+      });
+    }
   });
 </script>
 
 <!-- CSS for navigation and dropdowns -->
 <style>
-  /* Top Info Bar - always visible */
+  /* Top Info Bar - always visible on desktop, hidden on mobile */
   .top-info-bar {
     background: #f5c542;
     color: #01469b;
@@ -341,12 +382,6 @@
 
   .top-info-bar.hidden {
     transform: translateY(-100%);
-  }
-
-  @media (max-width: 768px) {
-    .top-info-bar {
-      display: block;
-    }
   }
 
   .info-bar-container {
@@ -374,16 +409,11 @@
 
   /* Navbar styling */
   .navbar {
-    top: 32px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      top: 32px;
-    }
+    transition: top 0.3s ease-in-out;
   }
 
   /* Nav link styling */
@@ -438,7 +468,7 @@
 
   /* Mobile menu overlay */
   #mobileMenu {
-    z-index: 100;
+    z-index: 9999;
     background: linear-gradient(135deg, #01469b 0%, #002b5e 100%);
   }
   
@@ -472,9 +502,18 @@
   .rotate-180 {
     transform: rotate(180deg);
   }
+  
+  /* Mobile responsive fixes */
+  @media (max-width: 768px) {
+    .navbar {
+      top: 0 !important;
+    }
+    
+    .logo-img {
+      height: 40px;
+    }
+  }
 </style>
-
-
 
 <br>
 <section class="relative w-full h-[300px] md:h-[400px] overflow-hidden">
@@ -653,7 +692,7 @@
 <!-- reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<!-- Optional: Add this script to validate checkbox before submission -->
+<!-- Form validation script -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('inquiryForm');
@@ -777,6 +816,8 @@
     </div>
   </div>
 </footer>
+
+</div><!-- End of main-content -->
 
   <!-- AOS Library -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

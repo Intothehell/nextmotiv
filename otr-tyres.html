@@ -3,96 +3,585 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTR Tyres</title>
+  <title>OTR Tyres | NextMotive</title>
   <link rel="icon" href="small logo.png">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- AOS (Animate On Scroll) - using newer version -->
+  <!-- AOS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css">
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  
+  <style>
+    /* ===== PAGE-SPECIFIC STYLES ===== */
+    
+    /* Carousel Styles */
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    
+    .carousel-slide.active {
+      opacity: 1;
+    }
+    
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .indicator.active {
+      background: #f5c542 !important;
+      width: 32px !important;
+      border-radius: 20px !important;
+    }
+    
+    .indicator {
+      transition: all 0.3s ease;
+    }
+    
+    .text-item {
+      transition: opacity 0.7s ease-in-out;
+    }
+    
+    /* Hero responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        height: 500px !important;
+      }
+      .text-item h1 {
+        font-size: 2.5rem !important;
+      }
+      .text-item p {
+        font-size: 1rem !important;
+      }
+      .indicator.active {
+        width: 28px !important;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .hero-section {
+        height: 480px !important;
+      }
+      .text-item h1 {
+        font-size: 2rem !important;
+      }
+      .text-item span {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.75rem !important;
+      }
+    }
+
+    /* ===== TYRE GRID ===== */
+    .tyre-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      perspective: 2000px;
+    }
+    
+    @media (max-width: 1024px) {
+      .tyre-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .tyre-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+    }
+    
+    /* Filter Button Styles */
+    .filter-btn {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .filter-btn.active {
+      background: #01469b !important;
+      color: white !important;
+      box-shadow: 0 10px 25px -5px rgba(1, 70, 155, 0.4);
+    }
+    
+    /* Footer clear fix */
+    footer {
+      clear: both !important;
+      position: relative !important;
+      z-index: 1 !important;
+    }
+    
+    section {
+      position: relative;
+      clear: both;
+    }
+
+    /* ===== 3D FLIP CARD DESIGN ===== */
+    .tyre-card {
+      opacity: 1;
+      display: block;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      perspective: 1500px;
+      height: 420px;
+    }
+    
+    .tyre-card.hidden-card {
+      display: none !important;
+    }
+    
+    .tyre-card .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .tyre-card:hover .card-inner,
+    .tyre-card.active .card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .tyre-card .card-front,
+    .tyre-card .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 24px;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Front Side */
+    .tyre-card .card-front {
+      background: white;
+      border: 1px solid rgba(1, 70, 155, 0.1);
+      background-image: radial-gradient(circle at 100% 0%, rgba(245, 197, 66, 0.05) 0%, transparent 50%);
+    }
+    
+    .tyre-card .card-front .image-wrapper {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .tyre-card .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+    }
+        
+    
+    .tyre-card:hover .card-front img {
+      transform: scale(1.05);
+    }
+    
+    .tyre-card .card-front .pattern-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #f5c542;
+      color: #01469b;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 5;
+    }
+    
+    .tyre-card .card-front .agri-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #22c55e;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 40px;
+      z-index: 5;
+    }
+    
+    .tyre-card .card-front .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #01469b;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    
+    .tyre-card .card-front .card-title span {
+      color: #f5c542;
+      font-weight: 300;
+      font-size: 16px;
+    }
+    
+    .tyre-card .card-front .card-desc {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .tyre-card .card-front .card-number {
+      font-size: 56px;
+      font-weight: 800;
+      color: rgba(1, 70, 155, 0.06);
+      position: absolute;
+      bottom: 15px;
+      right: 20px;
+      line-height: 1;
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    .tyre-card .card-front .tap-indicator {
+      position: absolute;
+      bottom: 15px;
+      left: 20px;
+      color: #94a3b8;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    @media (max-width: 1024px) {
+      .tyre-card .card-front .tap-indicator {
+        opacity: 1;
+      }
+    }
+    
+    /* Back Side */
+    .tyre-card .card-back {
+      background: linear-gradient(135deg, #01469b, #012a5e);
+      color: white;
+      transform: rotateY(180deg);
+      border: 2px solid #f5c542;
+    }
+    
+    .tyre-card .card-back .back-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #f5c542;
+      border-bottom: 2px solid rgba(245, 197, 66, 0.3);
+      padding-bottom: 12px;
+      text-align: center;
+    }
+    
+    .tyre-card .card-back .specs-list {
+      list-style: none;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    
+    .tyre-card .card-back .specs-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .tyre-card .card-back .specs-list li i {
+      color: #f5c542;
+      font-size: 14px;
+      margin-top: 2px;
+      width: 18px;
+    }
+    
+    .tyre-card .card-back .specs-list li strong {
+      color: white;
+      min-width: 75px;
+    }
+    
+    .tyre-card .card-back .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #f5c542;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid rgba(245, 197, 66, 0.2);
+    }
+    
+    .tyre-card .card-back .card-link i {
+      transition: transform 0.3s ease;
+    }
+    
+    .tyre-card .card-back .card-link:hover {
+      color: white;
+      gap: 12px;
+    }
+    
+    .tyre-card .card-back .card-link:hover i {
+      transform: translateX(5px);
+    }
+    
+    /* Mobile tap instruction */
+    .tyre-card .mobile-tap-hint {
+      display: none;
+    }
+    
+    @media (max-width: 1024px) {
+      .tyre-card .mobile-tap-hint {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #64748b;
+      }
+      
+      .tyre-card {
+        height: 440px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .tyre-card {
+        height: 420px;
+      }
+    }
+    
+    /* Animation delays */
+    .tyre-card {
+      animation: fadeInUp 0.5s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .tyre-card:nth-child(1) { animation-delay: 0.05s; }
+    .tyre-card:nth-child(2) { animation-delay: 0.10s; }
+    .tyre-card:nth-child(3) { animation-delay: 0.15s; }
+    .tyre-card:nth-child(4) { animation-delay: 0.20s; }
+    .tyre-card:nth-child(5) { animation-delay: 0.25s; }
+    .tyre-card:nth-child(6) { animation-delay: 0.30s; }
+    .tyre-card:nth-child(7) { animation-delay: 0.35s; }
+    .tyre-card:nth-child(8) { animation-delay: 0.40s; }
+    .tyre-card:nth-child(9) { animation-delay: 0.45s; }
+    .tyre-card:nth-child(10) { animation-delay: 0.50s; }
+    .tyre-card:nth-child(11) { animation-delay: 0.55s; }
+    .tyre-card:nth-child(12) { animation-delay: 0.60s; }
+    .tyre-card:nth-child(13) { animation-delay: 0.65s; }
+    .tyre-card:nth-child(14) { animation-delay: 0.70s; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== PRELOADER STYLES ===== */
+    /* ===== SVG PRELOADER STYLES ===== */
+/* === PRELOADER WITH DRAWING ANIMATION === */
+#preloader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.preloader-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.preloader-svg-wrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 30px;
+  position: relative;
+}
+
+#logo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Force stroke properties for all SVG elements */
+#logo-svg path,
+#logo-svg polygon,
+#logo-svg polyline {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill-opacity: 0;
+}
+
+.preloader-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #f5c542;
+  letter-spacing: -0.02em;
+  margin-top: 20px;
+  opacity: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.preloader-subtitle {
+  font-size: clamp(0.75rem, 3vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.3em;
+  margin-top: 10px;
+  opacity: 0;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+.preloader-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.preloader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f5c542, #fec20e);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .preloader-svg-wrapper {
+    max-width: 200px;
+  }
+  .preloader-progress {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-svg-wrapper {
+    max-width: 150px;
+  }
+}
+  </style>
 </head>
 
-
 <body>
-<!-- TOP YELLOW INFO BAR - Always visible on mobile -->
+<!-- TOP YELLOW INFO BAR -->
 <div id="topInfoBar" class="top-info-bar">
   <div class="info-bar-container">
     <div class="info-item left">
       <i class="fas fa-phone-alt"></i>
-      <span class="truncate">077 1743606</span>
+      <span>+94 77 783 2849</span>
     </div>
     <div class="info-item center">
       <i class="fas fa-envelope"></i>
-      <span class="truncate">info@nextmotive.com</span>
+      <span>info@nextmotive.com</span>
     </div>
     <div class="info-item right">
       <i class="fas fa-registered"></i>
-      <span class="truncate">REG # 2025-ENG-4472</span>
+      <span>REG : PV 00360487 </span>
     </div>
   </div>
 </div>
 
-<!-- PRELOADER -->
+<!-- PRELOADER WITH SVG DRAWING ANIMATION -->
 <div id="preloader">
-  <div class="preloader-left" id="preloaderLeft">
-    <div class="preloader-content" id="leftContent">
-      <div class="preloader-logo">NM</div>
-      <div>engineering</div>
-      <div class="text-xs font-light mt-4 text-white/80">precision · future</div>
+  <div class="preloader-container">
+    <div class="preloader-svg-wrapper">
+      <svg id="logo-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 428.15 371.21">
+        <defs>
+          <style>
+            .cls-1 { fill: #fec20e; stroke: #fdc214; stroke-miterlimit: 10; }
+            .cls-2 { fill: #5365af; stroke: #5365af; stroke-miterlimit: 10; }
+            .cls-3 { fill: #6d5623; stroke: #6e5723; stroke-miterlimit: 10; }
+            .cls-4 { fill: #6e5723; stroke: #6e5723; stroke-miterlimit: 10; }
+            .cls-5 { fill: #bc9e2f; stroke: #bc9e2f; stroke-miterlimit: 10; }
+            .cls-6 { fill: #bd9e2f; stroke: #bc9e2f; stroke-miterlimit: 10; }
+            .cls-7 { fill: #5366af; }
+            .cls-8 { fill: #4f3b15; }
+          </style>
+        </defs>
+        <path class="cls-1" d="M318.91,216.52q2.35,31.69,4.7,63.39a144.53,144.53,0,0,0-12.91-7.82c-7.75-4.15-20.07-10.76-36.66-13.57a90.54,90.54,0,0,0-44.61,2.87,85.16,85.16,0,0,0-28.69,16.18,80.76,80.76,0,0,0-16.44,19.56,81.77,81.77,0,0,0-6.81,15.14,95.67,95.67,0,0,0-3.36,13.56c-1.78,9.6-4.35,24.18-1.78,42.71.31,2.26.85,5.63,1.78,9.72A121.74,121.74,0,0,0,192.65,420a101.41,101.41,0,0,0,8.68,11.16,97,97,0,0,0,23.93,19.36c23.44,13.16,47,11.32,53.74,10.7a97.57,97.57,0,0,0,34.7-9.92l12,5.48L321,489.91l-10.3,74.61-42.13,8.09-7.83-59.74L224,498.26l-47,33.39L132.13,475.3l40.7-46.17q-1.49-4-2.87-8.19a255.19,255.19,0,0,1-8.61-33.29l-52.57-16.56L121.3,307.7l47-.79,4.7-.78L179.22,294l13.69-18.39L175.7,238l41.54-23.47,31.24,27.78,28.17-3.13,10.18-30.13Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-2" d="M323.8,281.87c-.21.38-6.45-3.26-13.1-6.07a89.8,89.8,0,0,0-34.44-7c-6.7,0-21.93.27-38.15,9.59A75.7,75.7,0,0,0,211.5,305c-9,15.19-10.18,29.42-11,38.93A109.71,109.71,0,0,0,212.48,403c3.9,7.48,11.33,21.36,27,33.26,5.55,4.22,16.44,12.31,32.28,15.46,18.6,3.69,35.12-1.29,35.41.39.14.78-3.44,2.07-8.31,3.82a85.4,85.4,0,0,1-13.7,3.71,87.38,87.38,0,0,1-18.68,1.17,98,98,0,0,1-17.12-2.34,93.71,93.71,0,0,1-23.09-8.12c-14.42-7.54-22.76-17.84-28.47-25.05a121.47,121.47,0,0,1-18.19-33.45,124.16,124.16,0,0,1-7.44-38.74A116.31,116.31,0,0,1,176.28,320c1.79-6.48,4.05-14.48,9.79-23.67a80.66,80.66,0,0,1,13.1-15.85,83.5,83.5,0,0,1,26-16.63,87,87,0,0,1,29-5.87,94.31,94.31,0,0,1,29.35,3.91A117.87,117.87,0,0,1,312.07,274C318,277.44,324,281.49,323.8,281.87Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-2" d="M354.91,373c1.24.4-.72,10.63-3.13,18.79-1.72,5.82-3.5,11.87-7.43,18.39-1.38,2.29-8.64,14-21.52,20.74-19,10-39.36,3.55-49.31.39-6.48-2.06-32.2-10.68-47.35-37.18-11.25-19.68-10.53-38.49-10.17-47.74.33-8.62,1-21.84,9-36,3.39-6,9.57-16.58,22.3-23.08,10.43-5.33,19.93-5.2,28.18-5.09,19.83.26,36.25,7.95,36,9,0,.12-.28.17-5.09-.19-9-.7-13.87-1.33-20.93-1.77a54,54,0,0,0-9.79,0,52.41,52.41,0,0,0-7.24,1.37c-6.63,1.86-14.48,7.25-20.15,13.7-11.29,12.86-12.92,28.81-13.5,35.22-.83,9.29-.94,30.81,13.7,50.48,2.74,3.68,24.53,32,56.15,28.56,19.64-2.15,32.36-15.39,34.24-17.41C350.75,388.48,353.38,372.55,354.91,373Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-2" d="M245.35,330.26a41,41,0,0,1,11.48-15.91,39.58,39.58,0,0,1,12.78-7.57A38.42,38.42,0,0,1,285,305c14.88,1.36,24.35,11.94,26.61,14.61l19.3-.27c-1.21-1.39-3-3.31-5.21-5.47-4.72-4.54-12.9-12.41-23.74-16.18-2.32-.8-17.74-5.92-32.09.78C251.4,307.07,245.43,330.3,245.35,330.26Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-2" d="M270.13,397.57c.14-.32,7.54,4.25,19,4.95a46.72,46.72,0,0,0,12-.78c4.68-.94,13.1-2.62,20.09-9.65a33.53,33.53,0,0,0,9.13-18.79h12.52a38.11,38.11,0,0,1-1,5.22c-4.38,16-17.92,24-18.78,24.52-11.52,6.63-22.8,5.17-28.44,4.44C280,405.58,270,397.94,270.13,397.57Z" transform="translate(-94.51 -201.99)"/>
+        <polygon class="cls-3" points="14.27 169.1 0.58 163.49 14.27 99.84 26.79 105.71 14.27 169.1"/>
+        <polygon class="cls-4" points="54.94 181.6 65.49 218.96 24.79 267.84 69.66 324.19 83.49 329.66 36.27 274.62 79.32 227.14 67.84 185.66 54.94 181.6"/>
+        <polyline class="cls-5" points="65.01 99.84 78.45 104.14 98.4 73.62 81.19 36.05 68.14 30.45 83.49 71.66"/>
+        <polyline class="cls-5" points="179.27 0.45 192.32 7.1 182.14 37.23 159.45 30.45 167.79 30.45 170.93 27.84"/>
+        <polygon class="cls-5" points="68.14 30.45 109.36 7.1 122.73 12.58 83.49 37.23 68.14 30.45"/>
+        <polygon class="cls-6" points="26.79 105.71 78.45 104.14 62.92 99.84 14.27 99.84 26.79 105.71"/>
+        <path class="cls-7" d="M258,322.29h12.84l20.73,36.19-.92.84v-37h10v47.2H287.77l-20.65-35.63L268,333v36.48H258Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-7" d="M313,322.29h10.5v47.23H313Zm3.79,0h33.53v8.58H316.74Zm0,19.49h29.31v8.58H316.74Zm0,19.17h33.53v8.57H316.74Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-7" d="M373.8,340.45l12.53-18.16H397.4L379,349l-14.18,20.53H353.72Zm-.12,9.75-1.07-1.53-18.43-26.38h11.07l12.49,17.9,1.46,2.11,19,27.22H387.17Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-7" d="M440.2,322.29H454v47.23h-9.54V332.85l.39,2.08-10.66,29.33H425L414.3,335.58l.38-2.73v36.67h-9.54V322.29H419l10.62,31.84Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-7" d="M474.82,367.85a16.16,16.16,0,0,1-9.67-15.25V339.22A16.13,16.13,0,0,1,474.82,324a27.46,27.46,0,0,1,21.35,0,16.13,16.13,0,0,1,9.67,15.25V352.6a16.16,16.16,0,0,1-9.67,15.25,27.46,27.46,0,0,1-21.35,0Zm15.66-7.76a7.65,7.65,0,0,0,3.31-2.91,8.07,8.07,0,0,0,1.17-4.35V339a8,8,0,0,0-1.17-4.35,7.65,7.65,0,0,0-3.31-2.91,12.69,12.69,0,0,0-10,0,7.65,7.65,0,0,0-3.31,2.91A8,8,0,0,0,476,339v13.84a8.07,8.07,0,0,0,1.17,4.35,7.65,7.65,0,0,0,3.31,2.91,12.69,12.69,0,0,0,10,0Z" transform="translate(-94.51 -201.99)"/>
+        <path class="cls-7" d="M512.16,360.62h10.5v8.9h-10.5Z" transform="translate(-94.51 -201.99)"/>
+        <polyline class="cls-8" points="153.97 40.36 182.14 37.23 159.45 30.45 146.09 33.35"/>
+      </svg>
     </div>
-  </div>
-  <div class="preloader-right" id="preloaderRight">
-    <div class="preloader-content" id="rightContent">
-      <div class="preloader-logo !border-[#01469b]">⚡</div>
-      <div class="text-[#01469b]">NEXT MOTIVE</div>
-      <div class="text-xs font-light text-[#01469b]">blue & yellow synergy</div>
+    <div class="preloader-text"></div>
+    <div class="preloader-subtitle"></div>
+    <div class="preloader-progress">
+      <div class="preloader-progress-bar"></div>
     </div>
   </div>
 </div>
-
-<script>
-  // Preloader animation - FIXED
-  window.addEventListener('load', function() {
-    const preloader = document.getElementById('preloader');
-    const left = document.getElementById('preloaderLeft');
-    const right = document.getElementById('preloaderRight');
-    const leftContent = document.getElementById('leftContent');
-    const rightContent = document.getElementById('rightContent');
-    const main = document.getElementById('main-content');
-    const topBar = document.getElementById('topInfoBar');
-
-    gsap.set([leftContent, rightContent], { opacity: 0, scale: 0.9 });
-    gsap.set(main, { opacity: 0 });
-    gsap.set(topBar, { opacity: 0 });
-
-    const tl = gsap.timeline();
-    tl.to([leftContent, rightContent], { opacity: 1, scale: 1, duration: 1.5, stagger: 0.2 })
-      .to([leftContent, rightContent], { opacity: 0, scale: 0.8, duration: 1.0, delay: 2.0 })
-      .to(left, { x: '-100%', duration: 1.5, ease: 'power4.inOut' }, 0)
-      .to(right, { x: '100%', duration: 1.5, ease: 'power4.inOut' }, 0)
-      .to(preloader, { opacity: 0, duration: 0.6, onComplete: function() { preloader.style.display = 'none'; } }, 1.5)
-      .to(main, { opacity: 1, duration: 1.0 }, 1.2)
-      .to(topBar, { opacity: 1, duration: 0.8 }, 1.4);
-  });
-</script>
 
 <!-- MAIN WEBSITE -->
 <div id="main-content">
 
-<!-- WHITE NAVIGATION BAR with Mobile Hamburger and Services Dropdown -->
+<!-- NAVIGATION BAR -->
 <nav class="navbar fixed w-full z-50 py-3 px-4 md:px-10 flex justify-between items-center" id="navbar">
   <div class="logo-container">
     <img src="/logo.png" alt="NextMotive Logo" class="logo-img">
   </div>
   
-  <!-- Desktop Navigation (hidden on mobile) -->
+  <!-- Desktop Navigation -->
   <div class="hidden md:flex gap-6 nav-links text-[#01469b] font-medium items-center">
     <a href="/index.html" class="nav-link text-base" data-text="Home">Home</a>
     <a href="/about.html" class="nav-link text-base" data-text="About">About</a>
@@ -105,56 +594,29 @@
         <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
       </button>
       
-      <!-- Dropdown Menu -->
       <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
         <div class="py-2">
-          <a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-industry w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Construction & Mining Equipment</span>
-            </div>
-          </a>
+          <!--<a href="/construction.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
+            <div class="flex items-center gap-3"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span class="font-medium">Construction & Mining Equipment</span></div>
+          </a>-->
           <a href="/compressor.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Compressed Air & Pneumatic Tools</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-wind w-5 text-[#f5c542]"></i><span class="font-medium">Compressors</span></div>
           </a>
           <a href="/agri.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Agriculture Tractors</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-tractor w-5 text-[#f5c542]"></i><span class="font-medium">Agriculture Tractors</span></div>
           </a>
-          <a href="/powerengineering.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Stand by Power / Power Engineering</span>
-            </div>
-          </a>
+          
           <a href="/spareparts.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-cogs w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Spare Parts</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-cogs w-5 text-[#f5c542]"></i><span class="font-medium">Spare Parts</span></div>
           </a>
           <a href="/vehicles.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Comercial Vehicles</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-truck w-5 text-[#f5c542]"></i><span class="font-medium">Commercial Vehicles</span></div>
           </a>
           <a href="/otr-tyres.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-              <span class="font-medium">OTR Tyres</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle w-5 text-[#f5c542]"></i><span class="font-medium">OTR Tyres</span></div>
           </a>
           <a href="/generators.html" class="block px-4 py-3 hover:bg-[#f5c542]/10 text-[#01469b] hover:pl-6 transition-all">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-              <span class="font-medium">Diesel Generators</span>
-            </div>
+            <div class="flex items-center gap-3"><i class="fas fa-bolt w-5 text-[#f5c542]"></i><span class="font-medium">Generators</span></div>
           </a>
         </div>
       </div>
@@ -165,888 +627,97 @@
     <a href="/contact.html" class="nav-link text-base" data-text="Contact">Contact</a>
   </div>
   
-  <!-- Desktop Contact Button (hidden on mobile) -->
   <a href="contact.html" class="hidden md:inline-block btn-contact text-sm px-6 py-2">Let's talk</a>
-
-  <!-- Mobile Hamburger Button -->
-  <button id="mobileMenuBtn" class="md:hidden w-10 h-10 rounded-lg bg-[#f5c542] text-[#01469b] flex items-center justify-center focus:outline-none" aria-label="Toggle menu">
-    <i class="fas fa-bars text-xl"></i>
-  </button>
+  <button id="mobileMenuBtn" class="md:hidden w-10 h-10 rounded-lg bg-[#f5c542] text-[#01469b] flex items-center justify-center"><i class="fas fa-bars text-xl"></i></button>
 </nav>
 
-<!-- Mobile Menu Overlay (hidden by default) -->
+<!-- Mobile Menu Overlay -->
 <div id="mobileMenu" class="fixed inset-0 bg-[#01469b] z-[100] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden overflow-y-auto">
   <div class="flex flex-col min-h-full pt-24 px-6 pb-10">
-    <!-- Close button -->
-    <button id="closeMenuBtn" class="absolute top-4 right-4 w-10 h-10 rounded-lg bg-[#f5c542] text-[#01469b] flex items-center justify-center">
-      <i class="fas fa-times text-xl"></i>
-    </button>
-    
-    <!-- Mobile Navigation Links -->
+    <button id="closeMenuBtn" class="absolute top-4 right-4 w-10 h-10 rounded-lg bg-[#f5c542] text-[#01469b] flex items-center justify-center"><i class="fas fa-times text-xl"></i></button>
     <div class="flex flex-col space-y-4">
       <a href="/index.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">Home</a>
       <a href="/about.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">About</a>
       <a href="/news.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">News</a>
-      
-      <!-- Mobile Services Accordion -->
       <div class="mobile-services-accordion">
-        <button id="mobileServicesBtn" class="flex items-center justify-between w-full text-white text-2xl font-semibold py-2 hover:text-[#f5c542] transition-colors">
-          <span>Services</span>
-          <i class="fas fa-chevron-down text-xl transition-transform duration-300" id="servicesArrow"></i>
-        </button>
-        
-        <!-- Services Submenu (hidden by default) -->
+        <button id="mobileServicesBtn" class="flex items-center justify-between w-full text-white text-2xl font-semibold py-2 hover:text-[#f5c542] transition-colors"><span>Services</span><i class="fas fa-chevron-down text-xl transition-transform duration-300" id="servicesArrow"></i></button>
         <div id="servicesSubmenu" class="hidden mt-2 ml-4 space-y-3 border-l-2 border-[#f5c542]/30 pl-4">
-          <a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-industry w-5 text-[#f5c542]"></i>
-            <span>Construction & Mining Equipment</span>
-          </a>
-          <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-wind w-5 text-[#f5c542]"></i>
-            <span>Compressed Air & Pneumatic Tools</span>
-          </a>
-          <a href="/agri.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-tractor w-5 text-[#f5c542]"></i>
-            <span>Agriculture Tractors</span>
-          </a>
-          <a href="/powerengineering.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-bolt w-5 text-[#f5c542]"></i>
-            <span>Stand by Power / Power Engineering</span>
-          </a>
-          <a href="/spareparts.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-cogs w-5 text-[#f5c542]"></i>
-            <span>Spare Parts</span>
-          </a>
-          <a href="/vehicles.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-            <span>Comercial Vehicles</span>
-          </a>
-          <a href="otr-tyres.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-            <span>OTR Tyres</span>
-          </a>
-          <a href="generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2">
-            <i class="fas fa-truck w-5 text-[#f5c542]"></i>
-            <span>Diesel Generators</span>
-          </a>
+          <!--<a href="construction.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-industry w-5 text-[#f5c542]"></i><span>Construction & Mining Equipment</span></a> -->
+          <a href="/compressor.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-wind w-5 text-[#f5c542]"></i><span>Compressors</span></a>
+          <a href="/agri.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-tractor w-5 text-[#f5c542]"></i><span>Agriculture Tractors</span></a>
+          <a href="/spareparts.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-cogs w-5 text-[#f5c542]"></i><span>Spare Parts</span></a>
+          <a href="/vehicles.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-truck w-5 text-[#f5c542]"></i><span>Commercial Vehicles</span></a>
+          <a href="otr-tyres.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-circle w-5 text-[#f5c542]"></i><span>OTR Tyres</span></a>
+          <a href="/generators.html" class="mobile-nav-link text-white/90 text-lg hover:text-[#f5c542] transition-colors flex items-center gap-3 py-2"><i class="fas fa-bolt w-5 text-[#f5c542]"></i><span>Generators</span></a>
         </div>
       </div>
-      
       <a href="/projects.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">Projects</a>
       <a href="/partners.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">Partners</a>
       <a href="/contact.html" class="mobile-nav-link text-white text-2xl font-semibold hover:text-[#f5c542] transition-colors py-2">Contact</a>
     </div>
-    
-    <!-- Mobile Contact Button -->
-    <div class="mt-10">
-      <a href="/contact.html" class="block w-full bg-[#f5c542] text-[#01469b] text-center font-semibold py-4 rounded-xl text-lg">Let's talk</a>
-    </div>
-    
-    <!-- Mobile Social Links -->
+    <div class="mt-10"><a href="/contact.html" class="block w-full bg-[#f5c542] text-[#01469b] text-center font-semibold py-4 rounded-xl text-lg">Let's talk</a></div>
     <div class="mt-auto mb-10">
       <p class="text-white/60 text-sm mb-4">Connect with us</p>
       <div class="flex gap-4">
-        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
-          <i class="fab fa-linkedin-in text-white text-xl"></i>
-        </a>
-        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
-          <i class="fab fa-twitter text-white text-xl"></i>
-        </a>
-        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors">
-          <i class="fab fa-facebook-f text-white text-xl"></i>
-        </a>
+        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors"><i class="fab fa-linkedin-in text-white text-xl"></i></a>
+        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors"><i class="fab fa-twitter text-white text-xl"></i></a>
+        <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors"><i class="fab fa-facebook-f text-white text-xl"></i></a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- JavaScript for mobile menu and accordion functionality -->
-<script>
-  // Mobile Menu Toggle and Accordion
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
-    const servicesSubmenu = document.getElementById('servicesSubmenu');
-    const servicesArrow = document.getElementById('servicesArrow');
-    
-    // Get all mobile nav links except the services button
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
-
-    function openMenu() {
-      mobileMenu.classList.remove('translate-x-full');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-      mobileMenu.classList.add('translate-x-full');
-      document.body.style.overflow = '';
-      // Reset accordion when closing menu
-      if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) {
-        servicesSubmenu.classList.add('hidden');
-        if (servicesArrow) servicesArrow.classList.remove('rotate-180');
-      }
-    }
-
-    // Mobile Services Accordion
-    if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
-      mobileServicesBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        servicesSubmenu.classList.toggle('hidden');
-        servicesArrow.classList.toggle('rotate-180');
-      });
-    }
-
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', openMenu);
-    }
-
-    if (closeMenuBtn) {
-      closeMenuBtn.addEventListener('click', closeMenu);
-    }
-
-    // Close menu when clicking on links (except services button)
-    mobileNavLinks.forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    // Handle escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
-        closeMenu();
-      }
-    });
-  });
-</script>
-
-<!-- CSS for navigation and dropdowns -->
-<style>
-  /* Top Info Bar - always visible */
-  .top-info-bar {
-    background: #f5c542;
-    color: #01469b;
-    padding: 0.4rem 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1001;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 0.8rem;
-    border-bottom: 1px solid rgba(1, 70, 155, 0.2);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease-in-out, opacity 0.5s ease;
-    opacity: 0;
-  }
-
-  .top-info-bar.visible {
-    opacity: 1;
-  }
-
-  .top-info-bar.hidden {
-    transform: translateY(-100%);
-  }
-
-  @media (max-width: 768px) {
-    .top-info-bar {
-      display: block;
-    }
-  }
-
-  .info-bar-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 4%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    letter-spacing: 0.2px;
-    font-size: 0.75rem;
-  }
-
-  .info-item i {
-    font-size: 0.8rem;
-    color: #01469b;
-    opacity: 0.9;
-  }
-
-  /* Navbar styling */
-  .navbar {
-    top: 32px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      top: 32px;
-    }
-  }
-
-  /* Nav link styling */
-  .nav-link {
-    position: relative;
-    transition: all 0.3s ease;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #f5c542;
-    transition: width 0.3s ease;
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    width: 100%;
-  }
-
-  .nav-link.active {
-    color: #f5c542;
-  }
-
-  /* Contact button styling */
-  .btn-contact {
-    background: #f5c542;
-    color: #01469b;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
-
-  .btn-contact:hover {
-    background: transparent;
-    color: #f5c542;
-    border-color: #f5c542;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(245, 197, 66, 0.3);
-  }
-
-  /* Logo styling */
-  .logo-img {
-    height: 45px;
-    width: auto;
-  }
-
-  /* Mobile menu overlay */
-  #mobileMenu {
-    z-index: 100;
-    background: linear-gradient(135deg, #01469b 0%, #002b5e 100%);
-  }
-  
-  /* Prevent body scroll when menu is open */
-  body.menu-open {
-    overflow: hidden;
-  }
-
-  /* Dropdown animation */
-  .group:hover .group-hover\:opacity-100 {
-    transition-delay: 0ms;
-  }
-  
-  .group .absolute {
-    pointer-events: none;
-  }
-  
-  .group:hover .absolute {
-    pointer-events: auto;
-  }
-  
-  /* Mobile accordion transitions */
-  #servicesSubmenu {
-    transition: all 0.3s ease;
-  }
-  
-  #servicesSubmenu.hidden {
-    display: none;
-  }
-  
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
-</style>
-
-<!-- JavaScript for mobile menu and accordion functionality -->
-<script>
-  // Mobile Menu Toggle and Accordion
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
-    const servicesSubmenu = document.getElementById('servicesSubmenu');
-    const servicesArrow = document.getElementById('servicesArrow');
-    
-    // Get all mobile nav links except the services button
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
-
-    function openMenu() {
-      mobileMenu.classList.remove('translate-x-full');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-      mobileMenu.classList.add('translate-x-full');
-      document.body.style.overflow = '';
-      // Reset accordion when closing menu
-      if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) {
-        servicesSubmenu.classList.add('hidden');
-        if (servicesArrow) servicesArrow.classList.remove('rotate-180');
-      }
-    }
-
-    // Mobile Services Accordion
-    if (mobileServicesBtn && servicesSubmenu && servicesArrow) {
-      mobileServicesBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        servicesSubmenu.classList.toggle('hidden');
-        servicesArrow.classList.toggle('rotate-180');
-      });
-    }
-
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', openMenu);
-    }
-
-    if (closeMenuBtn) {
-      closeMenuBtn.addEventListener('click', closeMenu);
-    }
-
-    // Close menu when clicking on links (except services button)
-    mobileNavLinks.forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    // Handle escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
-        closeMenu();
-      }
-    });
-  });
-</script>
-
-<!-- CSS for navigation and dropdowns -->
-<style>
-  /* Top Info Bar - always visible */
-  .top-info-bar {
-    background: #f5c542;
-    color: #01469b;
-    padding: 0.4rem 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1001;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 0.8rem;
-    border-bottom: 1px solid rgba(1, 70, 155, 0.2);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease-in-out, opacity 0.5s ease;
-    opacity: 0;
-  }
-
-  .top-info-bar.visible {
-    opacity: 1;
-  }
-
-  .top-info-bar.hidden {
-    transform: translateY(-100%);
-  }
-
-  @media (max-width: 768px) {
-    .top-info-bar {
-      display: block;
-    }
-  }
-
-  .info-bar-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 4%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    letter-spacing: 0.2px;
-    font-size: 0.75rem;
-  }
-
-  .info-item i {
-    font-size: 0.8rem;
-    color: #01469b;
-    opacity: 0.9;
-  }
-
-  /* Navbar styling */
-  .navbar {
-    top: 32px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      top: 32px;
-    }
-  }
-
-  /* Nav link styling */
-  .nav-link {
-    position: relative;
-    transition: all 0.3s ease;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #f5c542;
-    transition: width 0.3s ease;
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    width: 100%;
-  }
-
-  .nav-link.active {
-    color: #f5c542;
-  }
-
-  /* Contact button styling */
-  .btn-contact {
-    background: #f5c542;
-    color: #01469b;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
-
-  .btn-contact:hover {
-    background: transparent;
-    color: #f5c542;
-    border-color: #f5c542;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(245, 197, 66, 0.3);
-  }
-
-  /* Logo styling */
-  .logo-img {
-    height: 45px;
-    width: auto;
-  }
-
-  /* Mobile menu overlay */
-  #mobileMenu {
-    z-index: 100;
-    background: linear-gradient(135deg, #01469b 0%, #002b5e 100%);
-  }
-  
-  /* Prevent body scroll when menu is open */
-  body.menu-open {
-    overflow: hidden;
-  }
-
-  /* Dropdown animation */
-  .group:hover .group-hover\:opacity-100 {
-    transition-delay: 0ms;
-  }
-  
-  .group .absolute {
-    pointer-events: none;
-  }
-  
-  .group:hover .absolute {
-    pointer-events: auto;
-  }
-  
-  /* Mobile accordion transitions */
-  #servicesSubmenu {
-    transition: all 0.3s ease;
-  }
-  
-  #servicesSubmenu.hidden {
-    display: none;
-  }
-  
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
-</style>
-
-<!--Nisith-->
-
-<!-- HERO BANNER WITH AUTO-CHANGING CAROUSEL AND TEXT -->
-<section class="relative mt-[88px] h-[600px] md:h-[650px] overflow-hidden">
-
-  <!-- Carousel Container -->
+<!-- HERO BANNER WITH CAROUSEL -->
+<section class="hero-section relative mt-[88px] h-[600px] md:h-[650px] overflow-hidden">
   <div class="relative w-full h-full">
-    
-    <!-- Carousel Slides with 5 Tyre Images -->
-    <div class="carousel-slide active" data-slide="0">
-      <img src="images/tyres/slide/mining dump truck tire closeup heavy duty.png" alt="OTR Tyre 1" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
-    </div>
-
-    <div class="carousel-slide" data-slide="1">
-      <img src="images/tyres/slide/tractor tire muddy field close up.png" alt="OTR Tyre 2" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
-    </div>
-
-    <div class="carousel-slide" data-slide="2">
-      <img src="images/tyres/slide/construction wheel loader tire.png" alt="OTR Tyre 3" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
-    </div>
-
-    <div class="carousel-slide" data-slide="3">
-      <img src="images/tyres/slide/earthmoving equipment tire quarry.png" alt="OTR Tyre 4" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
-    </div>
-
-    <div class="carousel-slide" data-slide="4">
-      <img src="images/tyres/slide/off road tire on jeep sand desert.png" alt="OTR Tyre 5" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div>
-    </div>
-
-    <!-- Indicators -->
+    <div class="carousel-slide active" data-slide="0"><img src="images/tyres/slide/mining dump truck tire closeup heavy duty.png" alt="OTR Tyre 1" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div></div>
+    <div class="carousel-slide" data-slide="1"><img src="images/tyres/slide/tractor tire muddy field close up.png" alt="OTR Tyre 2" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div></div>
+    <div class="carousel-slide" data-slide="2"><img src="images/tyres/slide/construction wheel loader tire.png" alt="OTR Tyre 3" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div></div>
+    <div class="carousel-slide" data-slide="3"><img src="images/tyres/slide/earthmoving equipment tire quarry.png" alt="OTR Tyre 4" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div></div>
+    <div class="carousel-slide" data-slide="4"><img src="images/tyres/slide/off road tire on jeep sand desert.png" alt="OTR Tyre 5" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-r from-[#01469b]/90 via-[#01469b]/70 to-transparent"></div></div>
     <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
-      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer transition-all duration-300 hover:bg-white" onclick="goToSlide(0)"></span>
-      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer transition-all duration-300 hover:bg-white" onclick="goToSlide(1)"></span>
-      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer transition-all duration-300 hover:bg-white" onclick="goToSlide(2)"></span>
-      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer transition-all duration-300 hover:bg-white" onclick="goToSlide(3)"></span>
-      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer transition-all duration-300 hover:bg-white" onclick="goToSlide(4)"></span>
+      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer" onclick="goToSlide(0)"></span>
+      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer" onclick="goToSlide(1)"></span>
+      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer" onclick="goToSlide(2)"></span>
+      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer" onclick="goToSlide(3)"></span>
+      <span class="indicator w-2.5 h-2.5 rounded-full bg-white/50 cursor-pointer" onclick="goToSlide(4)"></span>
     </div>
-
-    <!-- Progress Bar -->
-    <div class="absolute bottom-0 left-0 w-0 h-1 bg-[#f5c542] z-20 transition-all duration-5000 ease-linear" id="progressBar"></div>
+    <div class="absolute bottom-0 left-0 w-0 h-1 bg-[#f5c542] z-20" id="progressBar"></div>
   </div>
-
-  <!-- Hero Content -->
   <div class="absolute inset-0 flex flex-col justify-center z-10 px-4" style="top: 40px;">
     <div class="max-w-7xl mx-auto w-full">
-
-      <!-- Animated Text Container -->
       <div class="relative min-h-[240px] md:min-h-[280px]">
-        
-        <!-- Slide 1 Text -->
-        <div class="text-item absolute top-0 left-0 w-full transition-opacity duration-700 ease-in-out" data-text="0">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-            OTR TYRES
-          </span>
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Heavy-Duty Off-Road<br>
-            <span class="text-[#f5c542]">Tyre Solutions</span>
-          </h1>
-          <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Deep tread patterns, reinforced sidewalls, and high load capacity to handle extreme off-highway conditions.
-          </p>
-        </div>
-
-        <!-- Slide 2 Text -->
-        <div class="text-item absolute top-0 left-0 w-full transition-opacity duration-700 ease-in-out opacity-0" data-text="1">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-            AGRICULTURE TYRES
-          </span>
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Flexible & Durable<br>
-            <span class="text-[#f5c542]">Agri Tyres</span>
-          </h1>
-          <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Reduce soil compaction while maintaining traction on soft fields with our specialized agricultural tyres.
-          </p>
-        </div>
-
-        <!-- Slide 3 Text -->
-        <div class="text-item absolute top-0 left-0 w-full transition-opacity duration-700 ease-in-out opacity-0" data-text="2">
-          <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-            INDUSTRIAL TYRES
-          </span>
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Reinforced & Stable<br>
-            <span class="text-[#f5c542]">For Construction & Mining</span>
-          </h1>
-          <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Cut-resistant rubber and stiff construction to ensure stability on hard terrain for heavy machinery.
-          </p>
-        </div>
-
-        <!-- Slide 4 Text -->
-        <div class="text-item absolute top-0 left-0 w-full transition-opacity duration-700 ease-in-out opacity-0" data-text="3">
-        <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-            HEAVY EQUIPMENT TYRES
-        </span>
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Maximum Load & Durability<br>
-            <span class="text-[#f5c542]">For Mining & Quarries</span>
-        </h1>
-        <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Engineered for extreme loads and rough surfaces, ensuring safety and long lifespan on mining and quarry sites.
-        </p>
-        </div>
-
-        <!-- Slide 5 Text -->
-        <div class="text-item absolute top-0 left-0 w-full transition-opacity duration-700 ease-in-out opacity-0" data-text="4">
-        <span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-            ALL TERRAIN TYRES
-        </span>
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-            Versatile Off-Road<br>
-            <span class="text-[#f5c542]">Performance Tyres</span>
-        </h1>
-        <p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Adaptable to diverse terrains from mud to gravel, combining traction, durability, and stability for multi-purpose use.
-        </p>
-        </div>
-
+        <div class="text-item absolute top-0 left-0 w-full" data-text="0"><span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">OTR TYRES</span><h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">Heavy-Duty Off-Road<br><span class="text-[#f5c542]">Tyre Solutions</span></h1><p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">Deep tread patterns, reinforced sidewalls, and high load capacity to handle extreme off-highway conditions.</p></div>
+        <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="1"><span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">AGRICULTURE TYRES</span><h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">Flexible & Durable<br><span class="text-[#f5c542]">Agri Tyres</span></h1><p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">Reduce soil compaction while maintaining traction on soft fields with our specialized agricultural tyres.</p></div>
+        <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="2"><span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">INDUSTRIAL TYRES</span><h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">Reinforced & Stable<br><span class="text-[#f5c542]">For Construction & Mining</span></h1><p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">Cut-resistant rubber and stiff construction to ensure stability on hard terrain for heavy machinery.</p></div>
+        <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="3"><span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">HEAVY EQUIPMENT TYRES</span><h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">Maximum Load & Durability<br><span class="text-[#f5c542]">For Mining & Quarries</span></h1><p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">Engineered for extreme loads and rough surfaces, ensuring safety and long lifespan on mining and quarry sites.</p></div>
+        <div class="text-item absolute top-0 left-0 w-full opacity-0" data-text="4"><span class="inline-block px-4 py-1.5 bg-[#f5c542]/20 text-[#f5c542] rounded-full text-sm font-semibold mb-4">ALL TERRAIN TYRES</span><h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white">Versatile Off-Road<br><span class="text-[#f5c542]">Performance Tyres</span></h1><p class="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">Adaptable to diverse terrains from mud to gravel, combining traction, durability, and stability for multi-purpose use.</p></div>
       </div>
-
-      <!-- CTA Buttons -->
-      <div class="flex flex-wrap gap-4 mt-8 relative z-10">
-        <a href="#otr-tyres-list" class="bg-[#f5c542] text-[#01469b] px-7 py-3.5 rounded-full font-semibold text-base hover:bg-white transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
-          Explore Tyres
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-      </div>
+      <div class="flex flex-wrap gap-4 mt-8 relative z-10"><a href="#otr-tyres-list" class="bg-[#f5c542] text-[#01469b] px-7 py-3.5 rounded-full font-semibold text-base hover:bg-white transition-all duration-300 inline-flex items-center gap-2 shadow-lg">Explore Tyres<i class="fas fa-arrow-right"></i></a></div>
     </div>
   </div>
 </section>
 
-<style>
-  /* Carousel Styles */
-  .carousel-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-  
-  .carousel-slide.active {
-    opacity: 1;
-  }
-  
-  .carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .indicator.active {
-    background: #f5c542 !important;
-    width: 32px !important;
-    border-radius: 20px !important;
-  }
-  
-  .indicator {
-    transition: all 0.3s ease;
-  }
-  
-  /* Custom transition duration for progress bar */
-  .transition-all.duration-5000 {
-    transition-duration: 5000ms;
-  }
-  
-  /* Text item transitions */
-  .text-item {
-    transition: opacity 0.7s ease-in-out;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    section.relative {
-      height: 500px !important;
-    }
-    
-    .text-item h1 {
-      font-size: 2.5rem !important;
-    }
-    
-    .text-item p {
-      font-size: 1rem !important;
-    }
-    
-    .indicator.active {
-      width: 28px !important;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    section.relative {
-      height: 480px !important;
-    }
-    
-    .text-item h1 {
-      font-size: 2rem !important;
-    }
-    
-    .text-item span {
-      font-size: 0.75rem !important;
-      padding: 0.25rem 0.75rem !important;
-    }
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const textItems = document.querySelectorAll('.text-item');
-    const indicators = document.querySelectorAll('.indicator');
-    const progressBar = document.getElementById('progressBar');
-    let currentSlide = 0;
-    const totalSlides = slides.length;
-    let slideInterval;
-
-    function showSlide(index) {
-      // Update slides
-      slides.forEach(slide => {
-        slide.classList.remove('active');
-      });
-      slides[index].classList.add('active');
-      
-      // Update text with smooth fade
-      textItems.forEach(item => {
-        item.classList.add('opacity-0');
-      });
-      textItems[index].classList.remove('opacity-0');
-      
-      // Update indicators
-      indicators.forEach((indicator, i) => {
-        if (i === index) {
-          indicator.classList.add('active');
-        } else {
-          indicator.classList.remove('active');
-        }
-      });
-      
-      // Reset and start progress bar
-      resetProgress();
-    }
-
-    function nextSlide() {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      showSlide(currentSlide);
-    }
-
-    function goToSlide(index) {
-      currentSlide = index;
-      showSlide(currentSlide);
-      resetAutoPlay();
-    }
-
-    function resetProgress() {
-      // Reset progress bar
-      progressBar.style.transition = 'none';
-      progressBar.style.width = '0%';
-      
-      // Force reflow
-      void progressBar.offsetWidth;
-      
-      // Start new progress
-      progressBar.style.transition = 'width 5s linear';
-      progressBar.style.width = '100%';
-    }
-
-    function startAutoPlay() {
-      slideInterval = setInterval(nextSlide, 5000);
-    }
-
-    function resetAutoPlay() {
-      clearInterval(slideInterval);
-      startAutoPlay();
-    }
-
-    // Pause on hover
-    const heroSection = document.querySelector('section.relative');
-    if (heroSection) {
-      heroSection.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-        progressBar.style.transition = 'none';
-      });
-      
-      heroSection.addEventListener('mouseleave', () => {
-        startAutoPlay();
-        resetProgress();
-      });
-    }
-
-    // Initialize
-    showSlide(0);
-    startAutoPlay();
-
-    // Make functions globally available for onclick
-    window.goToSlide = goToSlide;
-  });
-</script>
-
-
 <!-- OTR INTRODUCTION SECTION -->
-<section class="py-20 bg-white relative overflow-hidden">
-  <div class="absolute top-0 right-0 w-96 h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-0 left-0 w-96 h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
-  
-  <div class="max-w-7xl mx-auto px-4 relative z-10">
-    <div class="flex flex-col lg:flex-row items-center gap-16">
-      
-      <!-- Left Side - Text Content -->
+<section class="py-12 md:py-20 bg-white relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-8 md:gap-16">
       <div class="lg:w-1/2" data-aos="fade-right">
-        <span class="inline-block px-4 py-1.5 bg-[#f5c542]/10 text-[#f5c542] rounded-full text-sm font-semibold mb-4">
-          INDUSTRIAL & AGRICULTURAL TYRES
-        </span>
-        <h2 class="text-4xl md:text-5xl font-bold text-[#01469b] mb-6 leading-tight">
-          OTR Tyres 
-        </h2>
-        <p class="text-gray-600 text-lg leading-relaxed mb-6">
-          OTR tyres are defined by several core characteristics: deep, specialized tread patterns (from ribbed for hard surfaces to open bars for soft soil) that provide traction and self-cleaning; reinforced sidewalls and cut-resistant rubber compounds to withstand punctures, abrasion, and impacts from debris; high load capacity to support heavy machinery at relatively low speeds (typically 10–30 mph); and flexible or stiff construction depending on application—flexible for agricultural use to reduce soil compaction, stiff for industrial use to enhance stability on hard ground. These features allow OTR tyres to perform reliably in extreme off-highway conditions.  
-        </p>
+        <span class="inline-block px-3 md:px-4 py-1 md:py-1.5 bg-[#f5c542]/10 text-[#f5c542] rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4">INDUSTRIAL & AGRICULTURAL TYRES</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#01469b] mb-4 md:mb-6 leading-tight">OTR Tyres</h2>
+        <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-4 md:mb-6">OTR tyres are defined by several core characteristics: deep, specialized tread patterns that provide traction and self-cleaning; reinforced sidewalls and cut-resistant rubber compounds to withstand punctures and impacts; high load capacity to support heavy machinery; and flexible or stiff construction depending on application. These features allow OTR tyres to perform reliably in extreme off-highway conditions.</p>
       </div>
-      
-      <!-- Right Side - Image -->
-      <div class="lg:w-1/2 relative" data-aos="fade-left">
-        <div class="relative image-zoom rounded-3xl overflow-hidden shadow-2xl">
-          <img src="images/tyres/1.png" 
-               alt="OTR Tyre" 
-               class="w-full h-[500px] object-cover">
+      <div class="lg:w-1/2 relative mt-8 lg:mt-0" data-aos="fade-left">
+        <div class="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl">
+          <img src="images/tyres/1.png" alt="OTR Tyre" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" loading="lazy">
           <div class="absolute inset-0 bg-gradient-to-t from-[#01469b]/50 to-transparent"></div>
         </div>
-        
-        <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl p-6 float-animation">
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-[#f5c542] rounded-xl flex items-center justify-center">
-              <i class="fas fa-certificate text-3xl text-[#01469b]"></i>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Premium Quality</p>
-              <p class="font-bold text-[#01469b]">ISO 9001 Certified</p>
-            </div>
+        <div class="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl p-4 md:p-6">
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-12 h-12 md:w-16 md:h-16 bg-[#f5c542] rounded-lg md:rounded-xl flex items-center justify-center"><i class="fas fa-certificate text-2xl md:text-3xl text-[#01469b]"></i></div>
+            <div><p class="text-xs md:text-sm text-gray-500">Premium Quality</p><p class="text-base md:text-lg font-bold text-[#01469b]">ISO 9001 Certified</p></div>
           </div>
         </div>
       </div>
@@ -1054,875 +725,415 @@
   </div>
 </section>
 
-
-
-<!-- TYRE PRODUCTS GRID SECTION - SIMPLE & RELIABLE -->
-<section id="otr-tyres-list" class="py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-  
-  <!-- Background decorative elements -->
+<!-- TYRE PRODUCTS GRID SECTION -->
+<section id="otr-tyres-list" class="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
   <div class="absolute top-40 right-0 w-80 h-80 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
   <div class="absolute bottom-20 left-0 w-96 h-96 bg-[#01469b]/5 rounded-full blur-3xl"></div>
   
-  <div class="max-w-7xl mx-auto px-4 relative z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
     
     <!-- Section Header -->
-    <div class="text-center mb-16">
-      <div class="inline-flex items-center gap-2 bg-[#f5c542]/10 px-5 py-2 rounded-full mb-5">
+    <div class="text-center mb-12 md:mb-16">
+      <div class="inline-flex items-center gap-2 bg-[#f5c542]/10 px-4 md:px-5 py-2 rounded-full mb-4 md:mb-5">
         <span class="w-2 h-2 bg-[#f5c542] rounded-full animate-pulse"></span>
-        <span class="text-[#f5c542] font-semibold text-sm tracking-wide">PREMIUM COLLECTION</span>
+        <span class="text-[#f5c542] font-semibold text-xs md:text-sm tracking-wide">PREMIUM COLLECTION</span>
       </div>
-      
-      <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#01469b] mb-5">
-        OTR & 
-        <span class="relative inline-block">
-          <span class="text-[#f5c542]">Agricultural</span>
-          <svg class="absolute -bottom-2 left-0 w-full h-3 text-[#f5c542]/30" viewBox="0 0 200 10">
-            <path d="M0,5 Q50,0 100,5 Q150,10 200,5" stroke="currentColor" fill="none" stroke-width="2"/>
-          </svg>
-        </span>
-        <br>Tyres
-      </h2>
-      
-      <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-        Engineered for extreme conditions — from mining sites to agricultural fields
-      </p>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#01469b] mb-3 md:mb-5">OTR & <span class="text-[#f5c542]">Agricultural</span> Tyres</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto text-base md:text-lg px-4">Engineered for extreme conditions — from mining sites to agricultural fields</p>
     </div>
 
     <!-- Filter Buttons -->
-    <div class="flex flex-wrap justify-center gap-3 mb-12">
-      <button data-filter="all" class="filter-btn active px-7 py-3 rounded-full font-semibold transition-all duration-300 bg-[#01469b] text-white shadow-lg hover:shadow-xl">
-        All Products (13)
-      </button>
-      <button data-filter="industrial" class="filter-btn px-7 py-3 rounded-full font-semibold transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">
-        Industrial (11)
-      </button>
-      <button data-filter="agricultural" class="filter-btn px-7 py-3 rounded-full font-semibold transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">
-        Agricultural (2)
-      </button>
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12">
+      <button data-filter="all" class="filter-btn active px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-[#01469b] text-white shadow-lg">All Products (14)</button>
+      <button data-filter="industrial" class="filter-btn px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">Industrial (11)</button>
+      <button data-filter="agricultural" class="filter-btn px-5 md:px-7 py-2.5 md:py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 bg-gray-100 text-[#01469b] hover:bg-[#01469b] hover:text-white">Agricultural (3)</button>
     </div>
 
-    <!-- CSS Grid Container - No Isotope! -->
+    <!-- Tyre Grid -->
     <div class="tyre-grid">
       
-      <!-- Card 1 - E3/L3 W1 Industrial -->
+      <!-- Card 1 - E3/L3 W1 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/e3-l3-w1.jpg" alt="E3/L3 W1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              E3/L3-W1
-            </div>
-
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/e3-l3-w1.jpg" alt="E3/L3 W1 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">E3/L3-W1</div>
+            <h3 class="card-title">E3/L3 <span>(W1) Pattern</span></h3>
+            <p class="card-desc">Earthmoving, mining & loaders with high load capacity</p>
+            <div class="card-number">01</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              E3/L3 <span class="font-light">(W1) Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2 align-middle"></i>Sizes</span>
-                <span>17.5-25, 20.5-25, 23.5-25</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2 align-middle"></i>PR Rating</span>
-                <span>16-20</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2 align-middle"></i>Type</span>
-                <span>Tubeless & Tube Type</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <div class="flex items-center justify-between mb-4">
-              <h4 class="text-[#f5c542] font-bold text-lg">Key Features</h4>
-              <i class="fas fa-cog text-white/50 text-sm animate-spin-slow group-hover:animate-none"></i>
-            </div>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Earthmoving, Mining & Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> High Load Capacity (E-3/L-3)
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Deep Lug Tread Pattern
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Reinforced Cut-Resistant Sidewall
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">E3/L3 (W1) Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 17.5-25, 20.5-25, 23.5-25</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 16-20</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless & Tube</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Earthmoving, Mining</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 2 - E3/L3 W2 Industrial -->
+      <!-- Card 2 - E3/L3 W2 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/e3-l3-w2.webp" alt="E3/L3 W2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              E3/L3-W2
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/e3-l3-w2.webp" alt="E3/L3 W2 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">E3/L3-W2</div>
+            <h3 class="card-title">E3/L3 <span>(W2) Pattern</span></h3>
+            <p class="card-desc">Wider tread design for enhanced stability on heavy loads</p>
+            <div class="card-number">02</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              E3/L3 <span class="font-light">(W2) Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Sizes</span>
-                <span>17.5-25, 20.5-25, 23.5-25</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>16-20</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless & Tube Type</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Earthmoving, Mining & Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> W2 - Wider Tread Design
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Enhanced Stability for Heavy Loads
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Self-Cleaning Tread Pattern
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">E3/L3 (W2) Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 17.5-25, 20.5-25, 23.5-25</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 16-20</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless & Tube</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Wider Tread, Heavy Loads</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 3 - R4-1 Industrial -->
+      <!-- Card 3 - R4-1 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/r41.avif" alt="R4-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              R4-1
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/r41.avif" alt="R4-1 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">R4-1</div>
+            <h3 class="card-title">R4-1 <span>Pattern</span></h3>
+            <p class="card-desc">Industrial & construction with heavy duty load capacity</p>
+            <div class="card-number">03</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              R4-1 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>12.5/80-18</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Industrial & Construction
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Heavy Duty Load Capacity
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Tubeless for Easy Maintenance
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Excellent Hard Surface Traction
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">R4-1 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 12.5/80-18</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Industrial, Construction</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 4 - R4-2 Industrial -->
+      <!-- Card 4 - R4-2 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/r4-2.jpeg" alt="R4-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              R4-2
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/r4-2.jpeg" alt="R4-2 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">R4-2</div>
+            <h3 class="card-title">R4-2 <span>Pattern</span></h3>
+            <p class="card-desc">Construction & industrial loaders with wide tread</p>
+            <div class="card-number">04</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              R4-2 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Sizes</span>
-                <span>18.4-26, 16.9-24, 16.9-28</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12-14</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Construction & Industrial Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Wide Tread for Stability
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Cut-Resistant Rubber Compound
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> High Load-Bearing Capacity
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">R4-2 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 18.4-26, 16.9-24, 16.9-28</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12-14</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Construction, Loaders</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 5 - SKS-1 Industrial -->
+      <!-- Card 5 - SKS-1 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks1.jpg" alt="SKS-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-1
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks1.jpg" alt="SKS-1 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-1</div>
+            <h3 class="card-title">SKS-1 <span>Pattern</span></h3>
+            <p class="card-desc">Skid steer loaders with industrial lug pattern</p>
+            <div class="card-number">05</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-1 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>10</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Industrial Lug Pattern
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Excellent Traction on Loose Terrain
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Durable Sidewall Protection
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-1 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 10</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer Loaders</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 6 - SKS-2 Industrial -->
+      <!-- Card 6 - SKS-2 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks2.webp" alt="SKS-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-2
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks2.webp" alt="SKS-2 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-2</div>
+            <h3 class="card-title">SKS-2 <span>Pattern</span></h3>
+            <p class="card-desc">Higher load rating than SKS-1 with aggressive tread</p>
+            <div class="card-number">06</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-2 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Higher Load Rating Than SKS-1
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Aggressive Tread for Maximum Grip
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Reinforced Bead Construction
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-2 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer (Higher Load)</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 7 - SKS-3 Industrial -->
+      <!-- Card 7 - SKS-3 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks3.jpeg" alt="SKS-3 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-3
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks3.jpeg" alt="SKS-3 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-3</div>
+            <h3 class="card-title">SKS-3 <span>Pattern</span></h3>
+            <p class="card-desc">Deep lug tread depth with self-cleaning properties</p>
+            <div class="card-number">07</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-3 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Deep Lug Tread Depth
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Excellent Self-Cleaning Properties
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Heavy-Duty Construction
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-3 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer (Deep Lug)</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 8 - SKS-4 Industrial -->
+      <!-- Card 8 - SKS-4 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks4.jpeg" alt="SKS-4 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-4
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks4.jpeg" alt="SKS-4 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-4</div>
+            <h3 class="card-title">SKS-4 <span>Pattern</span></h3>
+            <p class="card-desc">Industrial traction pattern for hard surfaces</p>
+            <div class="card-number">08</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-4 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Industrial Traction Pattern
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Optimized for Hard Surfaces
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Long-Lasting Tread Life
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-4 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer (Industrial)</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 9 - SKS-5 Industrial -->
+      <!-- Card 9 - SKS-5 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks5.jpeg" alt="SKS-5 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-5
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks5.jpeg" alt="SKS-5 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-5</div>
+            <h3 class="card-title">SKS-5 <span>Pattern</span></h3>
+            <p class="card-desc">Reinforced puncture-resistant sidewall</p>
+            <div class="card-number">09</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-5 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Reinforced Puncture-Resistant Sidewall
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Extra Deep Tread for Longer Wear
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Superior Traction in Muddy Conditions
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-5 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer (Puncture Resistant)</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 10 - SKS-6 Industrial -->
+      <!-- Card 10 - SKS-6 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/sks6.jpeg" alt="SKS-6 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              SKS-6
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/sks6.jpeg" alt="SKS-6 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">SKS-6</div>
+            <h3 class="card-title">SKS-6 <span>Pattern</span></h3>
+            <p class="card-desc">All terrain pattern for versatile performance</p>
+            <div class="card-number">10</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              SKS-6 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Size</span>
-                <span>10-16.5</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tubeless</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Skid Steer Loaders
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> All Terrain Pattern
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Versatile Performance on Any Surface
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Balanced Tread for Mixed Conditions
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">SKS-6 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 10-16.5</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tubeless</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Skid Steer (All Terrain)</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 11 - TH202 Industrial -->
+      <!-- Card 11 - TH202 -->
       <div class="tyre-card industrial">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/th202.jpg" alt="TH202 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              TH202
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/th202.jpg" alt="TH202 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">TH202</div>
+            <h3 class="card-title">TH202 <span>Pattern</span></h3>
+            <p class="card-desc">Industrial trailers & carts with versatile sizes</p>
+            <div class="card-number">11</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              TH202 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Sizes</span>
-                <span>6.00-9, 5.00-8, 7.00-12, 6.50-10, 28x9-15</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>10-14</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tube Type</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Industrial Trailers & Carts
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Versatile Range of Sizes
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Durable Heavy Load Capacity
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Smooth Rolling for Transport Efficiency
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">TH202 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 6.00-9, 5.00-8, 7.00-12, 6.50-10, 28x9-15</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 10-14</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tube Type</li>
+              <li><i class="fas fa-industry"></i> <strong>Application:</strong> Trailers, Carts, Transport</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
       <!-- Card 12 - PR-1 Agricultural -->
       <div class="tyre-card agricultural">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/pr1.avif" alt="PR-1 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              PR-1
-            </div>
-            <div class="absolute bottom-4 left-4 bg-green-500/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-              <i class="fas fa-leaf mr-1"></i> Agricultural
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/pr1.avif" alt="PR-1 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">PR-1</div>
+            <div class="agri-badge"><i class="fas fa-leaf"></i> Agri</div>
+            <h3 class="card-title">PR-1 <span>Pattern</span></h3>
+            <p class="card-desc">Agricultural tractors with low soil compaction</p>
+            <div class="card-number">12</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              PR-1 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Sizes</span>
-                <span>12.4-28, 7.50-16, 13.6-38, 14.9-28</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>8-12</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tube Type</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Agricultural Tractors
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Low Soil Compaction - Flexible Design
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Excellent Flotation on Soft Fields
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Self-Cleaning Tread Bars
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">PR-1 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 12.4-28, 7.50-16, 13.6-38, 14.9-28</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 8-12</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tube Type</li>
+              <li><i class="fas fa-tractor"></i> <strong>Application:</strong> Agricultural Tractors</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
-      <!-- Card 13 - R1-2 Agricultural -->
+      <!-- Card 13 - R1-1 Agricultural -->
       <div class="tyre-card agricultural">
-        <div class="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 h-full">
-          <div class="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-            <img src="images/tyres/types/r1-2.jpeg" alt="R1-2 Tyre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="absolute top-4 right-4 bg-[#f5c542] text-[#01469b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              R1-2
-            </div>
-            <div class="absolute bottom-4 left-4 bg-green-500/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-              <i class="fas fa-leaf mr-1"></i> Agricultural
-            </div>
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/pr1.avif" alt="R1-1 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">R1-1</div>
+            <div class="agri-badge"><i class="fas fa-leaf"></i> Agri</div>
+            <h3 class="card-title">R1-1 <span>Pattern</span></h3>
+            <p class="card-desc">Agricultural tractors with excellent traction</p>
+            <div class="card-number">13</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
           </div>
-          <div class="p-5">
-            <h3 class="text-xl font-bold text-[#01469b] mb-2 group-hover:text-[#f5c542] transition-colors duration-300">
-              R1-2 <span class="font-light">Pattern</span>
-            </h3>
-            <div class="space-y-2 text-sm text-gray-600">
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Sizes</span>
-                <span>7.50-16, 12.4-28, 6.50-16, 13.6-28, 6.00-16</span>
-              </div>
-              <div class="flex items-center justify-between py-1 border-b border-gray-100">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>PR Rating</span>
-                <span>8-10</span>
-              </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="font-semibold"><i class="fas fa-circle text-[3px] text-[#f5c542] mr-2"></i>Type</span>
-                <span>Tube Type</span>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 bg-[#01469b] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out p-5 rounded-t-2xl z-20">
-            <h4 class="text-[#f5c542] font-bold text-lg mb-4">Key Features</h4>
-            <ul class="space-y-2 text-white/90 text-sm">
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Agricultural Tractors
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> R-1 Bar Tread Type
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-300">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Maximum Traction in Wet Conditions
-              </li>
-              <li class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-400">
-                <i class="fas fa-check-circle text-[#f5c542] text-xs"></i> Durable for Heavy Field Work
-              </li>
+          <div class="card-back">
+            <h4 class="back-title">R1-1 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Size:</strong> 14.9-28</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 10</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tube Type</li>
+              <li><i class="fas fa-tractor"></i> <strong>Application:</strong> Agricultural Tractors</li>
             </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 14 - R1-2 Agricultural -->
+      <div class="tyre-card agricultural">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="image-wrapper"><img src="images/tyres/types/r1-2.jpeg" alt="R1-2 Tyre" loading="lazy"></div>
+            <div class="pattern-badge">R1-2</div>
+            <div class="agri-badge"><i class="fas fa-leaf"></i> Agri</div>
+            <h3 class="card-title">R1-2 <span>Pattern</span></h3>
+            <p class="card-desc">R-1 bar tread type for maximum wet traction</p>
+            <div class="card-number">14</div>
+            <div class="tap-indicator"><i class="fas fa-sync-alt"></i> Tap to flip</div>
+          </div>
+          <div class="card-back">
+            <h4 class="back-title">R1-2 Specifications</h4>
+            <ul class="specs-list">
+              <li><i class="fas fa-ruler"></i> <strong>Sizes:</strong> 7.50-16, 12.4-28, 6.50-16, 13.6-28, 6.00-16</li>
+              <li><i class="fas fa-weight-hanging"></i> <strong>PR Rating:</strong> 8-10</li>
+              <li><i class="fas fa-tag"></i> <strong>Type:</strong> Tube Type</li>
+              <li><i class="fas fa-tractor"></i> <strong>Application:</strong> Agricultural (R-1 Bar Tread)</li>
+            </ul>
+            <a href="contact.html" class="card-link">Inquire Now <i class="fas fa-arrow-right"></i></a>
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- CTA Section -->
-    <div class="text-center mt-16">
-      <a href="contact.html" class="group relative inline-flex items-center gap-3 bg-[#01469b] text-white px-10 py-4 rounded-full font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+    <!-- CTA -->
+    <div class="text-center mt-12 md:mt-16">
+      <a href="contact.html" class="group relative inline-flex items-center gap-2 md:gap-3 bg-[#01469b] text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-semibold text-sm md:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
         <span class="relative z-10">Request a Quote</span>
         <i class="fas fa-arrow-right relative z-10 group-hover:translate-x-1 transition-transform duration-300"></i>
         <span class="absolute inset-0 bg-[#f5c542] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
       </a>
-      <p class="text-gray-500 text-sm mt-4">Get expert advice and competitive pricing</p>
+      <p class="text-gray-500 text-xs md:text-sm mt-4">Get expert advice and competitive pricing</p>
     </div>
 
   </div>
 </section>
 
-<style>
-  /* CSS Grid - Simple & Reliable - No Isotope needed! */
-  .tyre-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  
-  @media (max-width: 1024px) {
-    .tyre-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    .tyre-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-  }
-  
-  /* Card styles */
-  .tyre-card {
-    opacity: 0;
-    animation: cardReveal 0.6s ease-out forwards;
-  }
-  
-  @keyframes cardReveal {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Stagger animations */
-  .tyre-card:nth-child(1) { animation-delay: 0.05s; }
-  .tyre-card:nth-child(2) { animation-delay: 0.10s; }
-  .tyre-card:nth-child(3) { animation-delay: 0.15s; }
-  .tyre-card:nth-child(4) { animation-delay: 0.20s; }
-  .tyre-card:nth-child(5) { animation-delay: 0.25s; }
-  .tyre-card:nth-child(6) { animation-delay: 0.30s; }
-  .tyre-card:nth-child(7) { animation-delay: 0.35s; }
-  .tyre-card:nth-child(8) { animation-delay: 0.40s; }
-  .tyre-card:nth-child(9) { animation-delay: 0.45s; }
-  .tyre-card:nth-child(10) { animation-delay: 0.50s; }
-  .tyre-card:nth-child(11) { animation-delay: 0.55s; }
-  .tyre-card:nth-child(12) { animation-delay: 0.60s; }
-  .tyre-card:nth-child(13) { animation-delay: 0.65s; }
-  
-  /* Hidden state for filtering */
-  .tyre-card.hidden {
-    display: none;
-  }
-  
-  /* Filter button styles */
-  .filter-btn {
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .filter-btn.active {
-    background: #01469b;
-    color: white;
-    box-shadow: 0 10px 25px -5px rgba(1, 70, 155, 0.4);
-  }
-  
-  .filter-btn.active:hover {
-    background: #01469b;
-    color: white;
-  }
-  
-  /* Slow spin animation */
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  .animate-spin-slow {
-    animation: spin-slow 8s linear infinite;
-  }
-  
-  /* Custom scrollbar for hover panel */
-  .absolute.inset-x-0.bottom-0 {
-    scrollbar-width: thin;
-    scrollbar-color: #f5c542 #01469b;
-  }
-  
-  .absolute.inset-x-0.bottom-0::-webkit-scrollbar {
-    width: 4px;
-  }
-  
-  .absolute.inset-x-0.bottom-0::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-  }
-  
-  .absolute.inset-x-0.bottom-0::-webkit-scrollbar-thumb {
-    background: #f5c542;
-    border-radius: 10px;
-  }
-</style>
-
-<!-- Simple Filtering Script - No Isotope! -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.tyre-card');
-    
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        const filterValue = this.getAttribute('data-filter');
-        
-        // Update active button state
-        filterBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Filter cards
-        cards.forEach(card => {
-          if (filterValue === 'all') {
-            card.classList.remove('hidden');
-          } else {
-            if (card.classList.contains(filterValue)) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
-          }
-        });
-      });
-    });
-  });
-</script>
-
-<!-- Add a clearfix div right before the footer -->
+<!-- Clearfix before footer -->
 <div style="clear: both; width: 100%; height: 1px;"></div>
 
 <!-- Footer Section - Dark Blue Theme with larger fonts -->
 <footer class="bg-[#0a1a2f] text-white pt-20 pb-8 relative overflow-hidden">
+  <!-- Background decorative elements -->
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-0 left-0 w-96 h-96 bg-[#f5c542]/5 rounded-full blur-3xl"></div>
     <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#01469b]/20 rounded-full blur-3xl"></div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Main Footer Content -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-14">
+      <!-- Logo and Company Info - spans 4 columns on large screens -->
       <div class="lg:col-span-4 space-y-5">
         <div class="flex items-center gap-4">
-          <img src="/logo.png" alt="NextMotive Engineering Logo" class="h-16 w-auto object-contain">
+          <!-- Logo - using logo.png -->
+          <img src="logo.png" alt="NextMotive Engineering Logo" class="h-20 w-auto object-contain">
+          
         </div>
+        <p class="text-base font-bold tracking-wider font-montserrat max-w-md" style="color: #f5c542;">
+          NEXTMOTIVE ENGINEERING (PVT) LTD.
+        </p>
         <p class="text-gray-300 text-base leading-relaxed max-w-md">
           Engineering the future with precision, innovation, and reliability. We deliver next-level solutions for modern industries.
         </p>
+        <!-- Social Links with larger icons -->
         <div class="flex gap-5 pt-4">
           <a href="#" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#f5c542] transition-colors duration-300 group">
             <i class="fab fa-linkedin-in text-white text-xl group-hover:text-[#0a1a2f]"></i>
@@ -1939,43 +1150,50 @@
         </div>
       </div>
 
+      <!-- Quick Links - Navigation - spans 2 columns -->
       <div class="lg:col-span-2">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Quick Links</h3>
         <ul class="space-y-4">
-          <li><a href="#home" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Home</a></li>
-          <li><a href="#about" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">About</a></li>
-          <li><a href="#news" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">News</a></li>
-          <li><a href="#services" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Services</a></li>
+          <li><a href="/index.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Home</a></li>
+          <li><a href="/about.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">About</a></li>
+          <li><a href="/news.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">News</a></li>
+          <li><a href="/" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Services</a></li>
         </ul>
       </div>
 
+      <!-- More Links - spans 2 columns -->
       <div class="lg:col-span-2">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">More</h3>
         <ul class="space-y-4">
-          <li><a href="#projects" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Projects</a></li>
-          <li><a href="#partners" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Partners</a></li>
-          <li><a href="#contact" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Contact</a></li>
-          <li><a href="#careers" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Careers</a></li>
+          <li><a href="/projects.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Projects</a></li>
+          <li><a href="/partners.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Partners</a></li>
+          <li><a href="/contact.html" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Contact</a></li>
+          <li><a href="/" class="text-gray-300 hover:text-[#f5c542] transition-colors duration-300 text-base">Careers</a></li>
         </ul>
       </div>
 
+      <!-- Contact Info - spans 4 columns -->
       <div class="lg:col-span-4">
         <h3 class="text-xl font-semibold mb-5 text-[#f5c542]">Get In Touch</h3>
         <div class="space-y-5">
+          <!-- Address with larger text -->
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
               <i class="fas fa-map-marker-alt text-[#f5c542] text-lg"></i>
             </div>
             <p class="text-gray-300 text-base leading-relaxed">
-              No.11 Kossinna Road, Prakandeniya, Imbulgoda
+              No.304 , Kandy Road , Kirillawala , Weboda.
             </p>
           </div>
+          <!-- Phone -->
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="fas fa-phone-alt text-[#f5c542] text-lg"></i>
             </div>
-            <p class="text-gray-300 text-base">077 1743606</p>
+            <p class="text-gray-300 text-base">+94 77 783 2849 / +94 332 217714
+            </p>
           </div>
+          <!-- Email -->
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-[#f5c542]/10 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="fas fa-envelope text-[#f5c542] text-lg"></i>
@@ -1986,10 +1204,11 @@
       </div>
     </div>
 
+    <!-- Bottom Bar with Copyright and Credits - larger text -->
     <div class="pt-10 mt-10 border-t border-white/10">
       <div class="flex flex-col md:flex-row justify-between items-center gap-5">
         <div class="text-gray-300 text-base text-center md:text-left">
-          © 2025 NextMotive Engineering. All rights reserved.
+          © 2026 NextMotive Engineering. All rights reserved.
         </div>
         <div class="text-gray-300 text-base text-center md:text-right">
           Design & Developed by <span class="text-[#f5c542] font-semibold">devCODE</span>
@@ -1999,77 +1218,117 @@
   </div>
 </footer>
 
-</div>
+
+
+</div><!-- END MAIN CONTENT -->
+
+<!-- Back to Top Button -->
+<button id="backToTop" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#f5c542] text-[#01469b] w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-300 opacity-0 invisible" aria-label="Back to top"><i class="fas fa-arrow-up text-lg md:text-xl"></i></button>
 
 <!-- AOS Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Back to Top Button -->
-<button id="backToTop" class="fixed bottom-8 right-8 z-50 bg-[#f5c542] text-[#01469b] w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-300 opacity-0 invisible transform hover:scale-110 focus:outline-none" aria-label="Back to top">
-  <i class="fas fa-arrow-up text-xl"></i>
-</button>
-
+<!-- All JavaScript -->
 <script>
-  // Back to Top Button Functionality
+  AOS.init({ duration: 800, once: true, offset: 100 });
+  
   document.addEventListener('DOMContentLoaded', function() {
-    const backToTopButton = document.getElementById('backToTop');
-    if (backToTopButton) {
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 500) {
-          backToTopButton.classList.remove('opacity-0', 'invisible');
-          backToTopButton.classList.add('opacity-100', 'visible');
-        } else {
-          backToTopButton.classList.add('opacity-0', 'invisible');
-          backToTopButton.classList.remove('opacity-100', 'visible');
-        }
-      });
-      
-      backToTopButton.addEventListener('click', function() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
+    const servicesSubmenu = document.getElementById('servicesSubmenu');
+    const servicesArrow = document.getElementById('servicesArrow');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#mobileServicesBtn)');
+
+    function openMenu() { mobileMenu.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
+    function closeMenu() { mobileMenu.classList.add('translate-x-full'); document.body.style.overflow = ''; if (servicesSubmenu && !servicesSubmenu.classList.contains('hidden')) { servicesSubmenu.classList.add('hidden'); if (servicesArrow) servicesArrow.classList.remove('rotate-180'); } }
+    if (mobileServicesBtn && servicesSubmenu && servicesArrow) { mobileServicesBtn.addEventListener('click', function(e) { e.stopPropagation(); servicesSubmenu.classList.toggle('hidden'); servicesArrow.classList.toggle('rotate-180'); }); }
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMenu);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+    mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Carousel
+    const slides = document.querySelectorAll('.carousel-slide');
+    const textItems = document.querySelectorAll('.text-item');
+    const indicators = document.querySelectorAll('.indicator');
+    const progressBar = document.getElementById('progressBar');
+    let currentSlide = 0, slideInterval;
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active')); slides[index].classList.add('active');
+      textItems.forEach(item => item.classList.add('opacity-0')); textItems[index].classList.remove('opacity-0');
+      indicators.forEach((ind, i) => { if (i === index) ind.classList.add('active'); else ind.classList.remove('active'); });
+      if (progressBar) { progressBar.style.transition = 'none'; progressBar.style.width = '0%'; void progressBar.offsetWidth; progressBar.style.transition = 'width 5s linear'; progressBar.style.width = '100%'; }
     }
-    
-    // Initialize AOS
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100
-    });
+    function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
+    window.goToSlide = function(index) { currentSlide = index; showSlide(currentSlide); clearInterval(slideInterval); slideInterval = setInterval(nextSlide, 5000); };
+    if (slides.length) { showSlide(0); slideInterval = setInterval(nextSlide, 5000); }
+
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.tyre-card');
+    filterBtns.forEach(btn => { btn.addEventListener('click', function() { const filterValue = this.getAttribute('data-filter'); filterBtns.forEach(b => { b.classList.remove('active', 'bg-[#01469b]', 'text-white'); b.classList.add('bg-gray-100', 'text-[#01469b]'); }); this.classList.add('active', 'bg-[#01469b]', 'text-white'); this.classList.remove('bg-gray-100', 'text-[#01469b]'); cards.forEach(card => { if (filterValue === 'all') card.classList.remove('hidden-card'); else { if (card.classList.contains(filterValue)) card.classList.remove('hidden-card'); else card.classList.add('hidden-card'); } }); }); });
+
+    // Mobile Card Flip
+    cards.forEach(card => { card.addEventListener('click', function(e) { if (e.target.closest('a')) return; if (window.innerWidth <= 1024) { cards.forEach(c => { if (c !== this) c.classList.remove('active'); }); this.classList.toggle('active'); } }); });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.tyre-card')) cards.forEach(card => card.classList.remove('active')); });
+    let resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (window.innerWidth > 1024) cards.forEach(card => card.classList.remove('active')); }, 250); });
+
+    // Back to Top
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => { if (window.scrollY > 500) { backBtn.classList.remove('opacity-0', 'invisible'); backBtn.classList.add('opacity-100', 'visible'); } else { backBtn.classList.add('opacity-0', 'invisible'); backBtn.classList.remove('opacity-100', 'visible'); } });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Top Bar Hide
+    const topBar = document.getElementById('topInfoBar');
+    const navbar = document.getElementById('navbar');
+    if (topBar && navbar) { window.addEventListener('scroll', () => { if (window.scrollY > 50) { topBar.style.transform = 'translateY(-100%)'; navbar.style.top = '0'; } else { topBar.style.transform = 'translateY(0)'; navbar.style.top = '32px'; } }, { passive: true }); }
   });
+
+  // Preloader Animation
+window.addEventListener('load', function() {
+  const preloader = document.getElementById('preloader');
+  const main = document.getElementById('main-content');
+  const topBar = document.getElementById('topInfoBar');
+  
+  gsap.set(main, { opacity: 0 });
+  gsap.set(topBar, { opacity: 0 });
+
+  const tl = gsap.timeline();
+  
+  tl.to({}, { duration: 3.0 })
+    .to(preloader, {
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.inOut',
+      onComplete: function() {
+        preloader.style.display = 'none';
+      }
+    })
+    .to(main, {
+      opacity: 1,
+      duration: 1.0,
+      ease: 'power2.out'
+    }, '-=0.4')
+    .to(topBar, {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.6');
+});
 </script>
+<script src="script.js"></script>
 
 <style>
-  /* Mobile fixes - NO CONFLICT WITH GRID */
-  @media (max-width: 768px) {
-    footer {
-      position: relative !important;
-      clear: both !important;
-      margin-top: 40px !important;
-    }
-    
-    /* DO NOT override tyre-card display - let grid handle it */
-    .tyre-card {
-      margin-bottom: 20px;
-    }
+  .text-item h1 span {
+    font-size: inherit !important;
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    line-height: 1.2;
+    margin-left: -10px;  /* Adjust this value as needed */
   }
-
-  /* FORCE CARDS TO SHOW ON MOBILE - THE RED BOX TRICK */
-@media (max-width: 768px) {
-  .tyre-card {
-    display: block !important;
-    border: 2px solid red !important;
-    margin-bottom: 20px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-  
-  .tyre-grid {
-    display: block !important;
-  }
-}
 </style>
 
 </body>

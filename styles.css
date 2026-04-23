@@ -5,10 +5,22 @@
   box-sizing: border-box;
 }
 
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-y: auto;
+}
+
 body {
   font-family: 'Outfit', sans-serif;
   background: #f8faff;
-  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  -webkit-overflow-scrolling: touch;
   color: #1e293b;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -16,6 +28,30 @@ body {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+#main-content,
+#vehicles-grid {
+  overflow: visible;
+}
+
+/* Prevent accidental horizontal overflow on small screens */
+@media (max-width: 640px) {
+  body {
+    max-width: 100vw;
+  }
+  html, body {
+    min-height: auto;
+  }
+  #vehicles-grid {
+    overflow: visible !important;
+  }
+  #vehicles-grid .grid {
+    grid-template-columns: 1fr !important;
+  }
+  .vehicle-card {
+    min-width: 0;
+  }
 }
 
 /* === TOP YELLOW INFO BAR === */
@@ -74,63 +110,103 @@ body::-webkit-scrollbar {
   opacity: 0.9;
 }
 
-/* === PRELOADER === */
+
+
+/* === PRELOADER WITH DRAWING ANIMATION === */
 #preloader {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
 }
 
-.preloader-left,
-.preloader-right {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #01469b;
+.preloader-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.preloader-svg-wrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 30px;
   position: relative;
-  overflow: hidden;
 }
 
-.preloader-right {
-  background: #f5c542;
+#logo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.preloader-content {
-  color: white;
-  font-size: 2.2rem;
+/* Force stroke properties for all SVG elements */
+#logo-svg path,
+#logo-svg polygon,
+#logo-svg polyline {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill-opacity: 0;
+}
+
+.preloader-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 700;
+  color: #f5c542;
   letter-spacing: -0.02em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 20px;
   opacity: 0;
-  transform: scale(0.9);
+  font-family: 'Outfit', sans-serif;
 }
 
-.preloader-right .preloader-content {
-  color: #01469b;
+.preloader-subtitle {
+  font-size: clamp(0.75rem, 3vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.3em;
+  margin-top: 10px;
+  opacity: 0;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
 }
 
-.preloader-logo {
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 30% 70% 70% 30% / 30% 55% 45% 70%;
-  margin-bottom: 1rem;
-  border: 3px solid currentColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  font-weight: 700;
+.preloader-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 30px auto 0;
+  overflow: hidden;
+  opacity: 0;
 }
 
+.preloader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f5c542, #fec20e);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .preloader-svg-wrapper {
+    max-width: 200px;
+  }
+  .preloader-progress {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-svg-wrapper {
+    max-width: 150px;
+  }
+}
 /* === NAVIGATION BAR === */
 .navbar {
   background: rgba(255, 255, 255, 0.92);
@@ -152,7 +228,7 @@ body::-webkit-scrollbar {
 }
 
 .logo-img {
-  height: 45px;
+  height: 60px !important;
   width: auto;
   object-fit: contain;
 }
@@ -1008,6 +1084,9 @@ body::-webkit-scrollbar {
 /* === MAIN CONTENT INITIAL STATE === */
 #main-content {
   opacity: 0;
+  position: relative;
+  min-height: 100vh;
+  overflow: visible;
   transition: opacity 1s ease;
 }
 
@@ -1397,5 +1476,174 @@ body::-webkit-scrollbar {
   transition: width 0.1s linear;
 }
 
+/* ===== COMMERCIAL VEHICLES GRID FIXES ===== */
+
+/* Clearfix for grid container to prevent float issues */
+#vehicles-grid .grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+
+/* Define xs breakpoint (480px) since Tailwind doesn't include it by default */
+@media (min-width: 480px) {
+  #vehicles-grid .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  #vehicles-grid .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  #vehicles-grid .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Vehicle card styling */
+.vehicle-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
+}
+
+/* Image container consistent sizing */
+.vehicle-card .relative {
+  flex-shrink: 0;
+}
+
+.vehicle-card .h-40 {
+  height: 160px;
+}
+
+@media (min-width: 480px) {
+  .vehicle-card .xs\:h-44 {
+    height: 176px;
+  }
+}
+
+@media (min-width: 640px) {
+  .vehicle-card .sm\:h-48 {
+    height: 192px;
+  }
+}
+
+@media (min-width: 768px) {
+  .vehicle-card .md\:h-52 {
+    height: 208px;
+  }
+}
+
+/* Ensure images display properly */
+.vehicle-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fix for grid container clearing floats */
+#vehicles-grid {
+  overflow: visible;
+  clear: both;
+}
+
+#vehicles-grid::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Footer spacing fix */
+footer {
+  clear: both;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+}
+
+/* Section container overflow fixes */
+section {
+  overflow: visible;
+}
+
+#main-content {
+  overflow: visible;
+}
+
+/* Fix for xs grid on very small screens */
+@media (max-width: 480px) {
+  #vehicles-grid .grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100%;
+  }
+  
+  .vehicle-card {
+    width: 100% !important;
+    float: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-info-bar {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1001;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .info-bar-container {
+    padding: 0 3%;
+  }
+  
+  .info-item {
+    font-size: 0.65rem;
+    gap: 0.3rem;
+  }
+  
+  .info-item i {
+    font-size: 0.7rem;
+  }
+  
+  /* Hide the center item on very small screens if it overflows */
+  @media (max-width: 480px) {
+    .info-item.center {
+      display: block;
+    }
+    
+    .info-bar-container {
+      justify-content: space-around;
+    }
+  }
+}
 
 
+@media (max-width: 768px) {
+  .top-info-bar {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    top: 0 !important;
+  }
+}

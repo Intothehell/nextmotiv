@@ -407,6 +407,113 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ===== PRELOADER STYLES ===== */
+    /* ===== SVG PRELOADER STYLES ===== */
+#preloader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #01469b;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.preloader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 20px;
+}
+
+.preloader-svg-wrapper {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 30px;
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+#logo-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.preloader-text {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  font-family: 'Outfit', sans-serif;
+  margin-bottom: 8px;
+}
+
+.preloader-text::before {
+  content: 'NEXTMOTIVE';
+}
+
+.preloader-subtitle {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #f5c542;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 30px;
+}
+
+.preloader-subtitle::before {
+  content: 'ENGINEERING';
+}
+
+.preloader-progress {
+  width: 100%;
+  max-width: 250px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.preloader-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #f5c542;
+  border-radius: 10px;
+  animation: progressFill 2.5s ease-in-out forwards 0.5s;
+}
+
+@keyframes progressFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .preloader-svg-wrapper {
+    max-width: 250px;
+  }
+  .preloader-text {
+    font-size: 1.8rem;
+  }
+  .preloader-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+}
   </style>
 </head>
 
@@ -1185,7 +1292,50 @@
     const navbar = document.getElementById('navbar');
     if (topBar && navbar) { window.addEventListener('scroll', () => { if (window.scrollY > 50) { topBar.style.transform = 'translateY(-100%)'; navbar.style.top = '0'; } else { topBar.style.transform = 'translateY(0)'; navbar.style.top = '32px'; } }, { passive: true }); }
   });
+
+  // Preloader Animation
+window.addEventListener('load', function() {
+  const preloader = document.getElementById('preloader');
+  const main = document.getElementById('main-content');
+  const topBar = document.getElementById('topInfoBar');
+  
+  gsap.set(main, { opacity: 0 });
+  gsap.set(topBar, { opacity: 0 });
+
+  const tl = gsap.timeline();
+  
+  tl.to({}, { duration: 3.0 })
+    .to(preloader, {
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.inOut',
+      onComplete: function() {
+        preloader.style.display = 'none';
+      }
+    })
+    .to(main, {
+      opacity: 1,
+      duration: 1.0,
+      ease: 'power2.out'
+    }, '-=0.4')
+    .to(topBar, {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.6');
+});
 </script>
+
+<style>
+  .text-item h1 span {
+    font-size: inherit !important;
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    line-height: 1.2;
+    margin-left: -10px;  /* Adjust this value as needed */
+  }
+</style>
 
 </body>
 </html>

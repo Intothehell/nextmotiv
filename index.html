@@ -1072,5 +1072,77 @@
       scrollPercent + "%";
   });
 </script>
+<!-- VESAK TOP RIGHT DECORATION -->
+<div class="fixed top-0 right-0 z-[9999] pointer-events-none" style="top: 50px !important;">
+
+  <div class="relative w-[300px] md:w-[400px]">
+
+      <!-- BIG ROTATING WHEEL -->
+      <img src="/images/pngegg.png"
+           class="absolute top-[30px] right-[30px] w-[170px] md:w-[220px] rotate-wheel opacity-90">
+
+      <!-- VESAK LANTERN - LARGER, RIGHT EDGE -->
+      <img src="/images/Vesak-Kudu-PNG.png"
+           class="floating-lantern"
+           style="width: 100%; max-width: 320px; position: relative; right: -15px; margin-right: -35px;">
+
+  </div>
+</div>
+
+<style>
+
+/* ONLY ROTATION */
+.rotate-wheel{
+  animation: rotateWheel 18s linear infinite;
+}
+
+/* SMOOTH CONTINUOUS ROTATION */
+@keyframes rotateWheel{
+  from{
+      transform: rotate(0deg);
+  }
+  to{
+      transform: rotate(360deg);
+  }
+}
+
+/* LANTERN FLOATING */
+.floating-lantern{
+  animation: floatLantern 4s ease-in-out infinite;
+}
+
+/* SMALL FLOAT EFFECT */
+@keyframes floatLantern{
+  0%{
+      transform: translateY(0px);
+  }
+  50%{
+      transform: translateY(10px);
+  }
+  100%{
+      transform: translateY(0px);
+  }
+}
+
+/* RESPONSIVE - KEEP RIGHT EDGE */
+@media (max-width: 768px) {
+  .floating-lantern {
+      right: -10px !important;
+      margin-right: -25px !important;
+      max-width: 260px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-lantern {
+      right: -5px !important;
+      margin-right: -20px !important;
+      max-width: 220px !important;
+  }
+}
+
+</style>
+
+
 </body>
 </html>

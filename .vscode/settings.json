@@ -1,9 +1,0 @@
-{
-    "liveServer.settings.port": 5501,
-    "files.autoSave": "afterDelay",
-    "editor.suggest.preview": true,
-    "workbench.activityBar.compact": true,
-    "workbench.activityBar.location": "default",
-    "workbench.iconTheme": "vs-seti",
-    "chat.agent.maxRequests": 500
-}
